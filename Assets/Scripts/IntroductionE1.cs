@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//Joseph
 public class IntroductionE1 : MonoBehaviour
 {
     //We need to create a walker
