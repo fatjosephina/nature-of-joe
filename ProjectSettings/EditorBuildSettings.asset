@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/IntroductionE1Poselenzny.unity
+    guid: 1e72185cf0691894f9657b0016148325
   m_configObjects: {}
