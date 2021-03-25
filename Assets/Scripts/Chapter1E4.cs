@@ -64,6 +64,16 @@ public class Mover1_8
         mover.transform.position = new Vector2(location.x, location.y);
     }
 
+    public static Vector2 ClampMagnitude(Vector2 vector, float maxLength)
+    {
+        // magnitude = sqrt of x^2 * y^2. sqrMagnitude = magnitude ^2. => sqrMagnitude = x^2 * y^2
+        if ((Mathf.Pow(vector.x, 2f) + Mathf.Pow(vector.y, 2f)) > Mathf.Pow(maxLength, 2f))
+        {
+            return vector.normalized * maxLength;
+        }
+        return vector;
+    }
+
     public void CheckEdges()
     {
         if (location.x > maximumPos.x)
