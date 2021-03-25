@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/IntroductionE2Poselenzny.unity
-    guid: 1aaad1f01ece95f4a955aa7f414df751
+    path: Assets/Scenes/IntroductionE3Poselenzny.unity
+    guid: dd0bbb43bca7e4d469106b321e910e39
   m_configObjects: {}
