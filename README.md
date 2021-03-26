@@ -8,6 +8,7 @@ This is a repository that I created to include content from my Nature of Code (U
 * Exercise 3 Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/IntroductionE3.cs
 * Exercise 3 Build: https://github.com/fatjosephina/nature-of-joe/blob/main/Builds/IntroductionE3Poselenzny.zip
 * Video: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Videos/IntroductionVideo.zip  
+
 **CHAPTER 1**
 * Exercise 2 Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Chapter1E2.cs
 * Exercise 2 Build: https://github.com/fatjosephina/nature-of-joe/blob/main/Builds/Chapter1E2Poselenzny.zip
