@@ -9,7 +9,8 @@ public class Chapter2E4 : MonoBehaviour
     public float leftWallX;
     public float rightWallX;
     public Transform moverSpawnTransform;
-    public Vector3 frictionWallPosition;
+    public Vector3 frictionWallAPosition;
+    public Vector3 frictionWallBPosition;
 
     private List<Mover2_4> Movers = new List<Mover2_4>();
     // Define constant forces in our environment
@@ -19,10 +20,12 @@ public class Chapter2E4 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject frictionWall = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        frictionWall.transform.position = frictionWallPosition;
-        frictionWall.transform.localScale = new Vector3(5, 0.2f, 1);
-        frictionWall.tag = "Friction Wall";
+        GameObject frictionWallA = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        frictionWallA.transform.position = frictionWallAPosition;
+        frictionWallA.transform.localScale = new Vector3(10, 0.2f, 1);
+        GameObject frictionWallB = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        frictionWallB.transform.position = frictionWallBPosition;
+        frictionWallB.transform.localScale = new Vector3(10, 0.2f, 1);
         // Create copys of our mover and add them to our list
         while (Movers.Count < 30)
         {
@@ -48,8 +51,16 @@ public class Chapter2E4 : MonoBehaviour
             Vector3 friction = mover.body.velocity;
             friction.Normalize();
             friction *= -frictionStrength;
+            if (frictionWallBPosition.y <= mover.body.transform.position.y && mover.body.transform.position.y <= frictionWallAPosition.y)
+            {
+                friction *= -2f;
+            }
+            else if (mover.body.transform.position.y <= frictionWallBPosition.y)
+            {
+                friction *= 0.00000000001f;
+            }
+            Debug.Log(friction);
             mover.body.AddForce(friction, ForceMode.Force);
-
             mover.CheckBoundaries();
         }
     }
