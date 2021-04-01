@@ -31,8 +31,6 @@ public class Ecosystem2 : MonoBehaviour
         {
             Rigidbody body = m.body;
             Vector2 force = a.Attract(body) + predator.Repel(body); // Apply the attraction from the Attractor on each Mover object
-            Debug.Log(predator.Repel(body));
-            Debug.Log(a.Attract(body));
             m.ApplyForce(force);
             m.Update();
         }
