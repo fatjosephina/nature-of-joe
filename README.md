@@ -26,3 +26,10 @@ This is a repository that I created to include content from my Nature of Code (U
 * Exercise 9 Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Chapter2E9.cs
 * Ecosystem Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Ecosystem2.cs
 * Video: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Videos/Chapter2Video.zip
+
+**CHAPTER 3**
+* Exercise 1 Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Chapter3E1.cs
+* Exercise 2 Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Chapter3E2.cs
+* Exercise 4 Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Chapter3E4.cs
+* Ecosystem Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Ecosystem3.cs
+* Video: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Videos/Chapter3Video.zip
