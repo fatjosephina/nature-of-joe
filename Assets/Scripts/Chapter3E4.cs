@@ -40,7 +40,7 @@ public class Chapter3E4 : MonoBehaviour
         float x = r * Mathf.Cos(theta);
         float y = r * Mathf.Sin(theta);
 
-        sphere.transform.position = new Vector2(x, y);
+        GameObject.CreatePrimitive(PrimitiveType.Sphere).transform.position = new Vector2(x, y);
 
         theta += 1f * Time.deltaTime; //Time.deltaTime to keep the speed consistant
         r += 0.5f * Time.deltaTime;
