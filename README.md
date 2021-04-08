@@ -42,6 +42,7 @@ This is a repository that I created to include content from my Nature of Code (U
 **CHAPTER 3**
 <details>
   <summary> Click to expand </summary>
+
 * Exercise 1 Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Chapter3E1.cs
 * Exercise 2 Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Chapter3E2.cs
 * Exercise 4 Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Chapter3E4.cs
