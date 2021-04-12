@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Friction Wall
+  - Chapter1Predator
+  - Chapter2Predator
   layers:
   - Default
   - TransparentFX
