@@ -6,9 +6,10 @@ public class Ecosystem6 : MonoBehaviour
 {
     public float maxSpeed = 2, maxForce = 2;
 
-    public Mesh coneMesh; // If you want to use your own cone mesh, drop it into the editor here.
+    /*public Mesh coneMesh; // If you want to use your own cone mesh, drop it into the editor here.
     public Mesh cubeMesh;
-    public Mesh sphereMesh;
+    public Mesh sphereMesh;*/
+    public Mesh[] meshes = new Mesh[3];
 
     private List<BoidE> boids; // Declare a List of Vehicle objects.
     private Vector2 minimumPos, maximumPos;
@@ -17,7 +18,7 @@ public class Ecosystem6 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Mesh[] meshes = { coneMesh, cubeMesh, sphereMesh };
+        //Mesh[] meshes = { coneMesh, cubeMesh, sphereMesh };
         findWindowLimits();
         boids = new List<BoidE>(); // Initilize and fill the List with a bunch of Vehicles
         boidParents = new List<BoidParent>();
@@ -28,12 +29,12 @@ public class Ecosystem6 : MonoBehaviour
                 float ranX = Random.Range(-1.0f, 1.0f);
                 float ranY = Random.Range(-1.0f, 1.0f);
                 Mesh mesh = meshes[i];
-                boids.Add(new BoidE(new Vector2(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce, mesh, boidParents[j]));
+                boids.Add(new BoidE(new Vector2(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce, mesh));
             }
             float ranXParent = Random.Range(-1.0f, 1.0f);
             float ranYParent = Random.Range(-1.0f, 1.0f);
             boidParents.Add(new BoidParent(new Vector2(ranXParent, ranYParent), minimumPos, maximumPos, maxSpeed, maxForce, boids));
-            /*foreach (int i in boidParents[j])
+            /*foreach (BoidParent parent in boidParents[j])
             {
 
             }*/
@@ -71,7 +72,7 @@ class BoidParent
     public BoidE[] boidColony;
     private float maxSpeed, maxForce;
     private Vector2 minPos, maxPos;
-    public GameObject myVehicle;
+    private GameObject myVehicle;
     private Rigidbody rb;
 
     public BoidParent(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce, List<BoidE> boids)
@@ -82,6 +83,11 @@ class BoidParent
         maxForce = _maxForce;
 
         boidColony = boids.ToArray();
+
+        foreach (BoidE boid in boidColony)
+        {
+            boid.myVehicle.transform.SetParent(myVehicle.transform);
+        }
 
         myVehicle = GameObject.CreatePrimitive(PrimitiveType.Cube);
         Renderer renderer = myVehicle.GetComponent<Renderer>();
@@ -128,10 +134,10 @@ class BoidE
 
     private float maxSpeed, maxForce;
     private Vector2 minPos, maxPos;
-    private GameObject myVehicle;
+    public GameObject myVehicle;
     private Rigidbody rb;
 
-    public BoidE(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce, Mesh coneMesh, BoidParent parent)
+    public BoidE(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce, Mesh coneMesh)
     {
         minPos = _minPos - Vector2.one;
         maxPos = _maxPos + Vector2.one;
@@ -165,7 +171,7 @@ class BoidE
             myVehicle.transform.localScale = new Vector3(1f, 2f, 1f);
         }
 
-        myVehicle.transform.SetParent(parent.myVehicle.transform);
+        //myVehicle.transform.SetParent(parent.myVehicle.transform);
     }
 
     private void checkBounds()
