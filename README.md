@@ -49,3 +49,14 @@ This is a repository that I created to include content from my Nature of Code (U
 * Ecosystem Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Ecosystem3.cs
 * Video: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Videos/Chapter3Video.zip
 </details>
+
+**CHAPTER 6**
+<details>
+  <summary> Click to expand </summary>
+
+* Exercise 1 Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Chapter6E1.cs
+* Exercise 16 Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Chapter6E16.cs
+* Exercise 18 Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Chapter6E18.cs
+* Ecosystem Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Ecosystem6.cs
+* Video: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Videos/Chapter6Video.zip
+</details>
