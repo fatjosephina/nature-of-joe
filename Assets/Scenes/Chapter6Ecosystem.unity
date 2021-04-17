@@ -257,11 +257,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 2
-  maxForce: 2
-  coneMesh: {fileID: -2432090755550338912, guid: ddfc14ec5b1b9444395c732f431b1d3f,
-    type: 3}
-  cubeMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-  sphereMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  maxForce: 1.5
+  sep: 0.1
+  coh: 0.1
+  ali: 0.1
   meshes:
   - {fileID: -2432090755550338912, guid: ddfc14ec5b1b9444395c732f431b1d3f, type: 3}
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
