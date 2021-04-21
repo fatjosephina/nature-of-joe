@@ -9,6 +9,23 @@ public class Ecosystem2 : MonoBehaviour
 
     private Predator predator;
 
+    /*public float mass;
+    private Vector2 location;
+    private float G;
+    public Rigidbody body;
+    private GameObject attractor;
+    private float radius;
+
+        public Transform transform;
+    public Rigidbody body;
+
+    private Vector2 minimumPos, maximumPos;
+
+    private GameObject mover;
+
+        private float G;
+    public Rigidbody body;*/
+
     // Start is called before the first frame update
     void Start()
     {

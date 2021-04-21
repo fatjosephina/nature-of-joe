@@ -51,6 +51,11 @@ public class Ecosystem : MonoBehaviour
             chapter1Creature = Instantiate(chapter1Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
             chapter1Creatures.Add(chapter1Creature);
         }
+        for (int i = 0; i < chapter2CreaturePopulation; i++)
+        {
+            chapter2Creature = Instantiate(chapter2Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            chapter2Creatures.Add(chapter2Creature);
+        }
     }
 
     // Update is called once per frame

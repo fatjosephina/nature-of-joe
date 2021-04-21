@@ -177,8 +177,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+      propertyPath: m_ClearFlags
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: near clip plane
       value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.9889776
+      objectReference: {fileID: 0}
+    - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.8160377
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
@@ -570,8 +586,9 @@ MonoBehaviour:
   chapter1CreaturePopulation: 10
   chapter1MinimumPopulation: 0
   chapter2Creatures: []
-  chapter2Creature: {fileID: 0}
-  chapter2CreaturePopulation: 0
+  chapter2Creature: {fileID: 7658783244571534225, guid: abb34a25249514f4284bd9c166346490,
+    type: 3}
+  chapter2CreaturePopulation: 5
   chapter2MinimumPopulation: 0
   chapter3Creatures: []
   chapter3Creature: {fileID: 0}
