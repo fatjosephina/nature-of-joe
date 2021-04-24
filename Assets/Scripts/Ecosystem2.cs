@@ -14,22 +14,22 @@ public class Ecosystem2 : MonoBehaviour
     private float G;
     public Rigidbody body;
     private GameObject attractor;
-    private float radius;
+    private float radius;*/
 
-        public Transform transform;
+    public Transform transform;
     public Rigidbody body;
 
-    private Vector2 minimumPos, maximumPos;
+    private Vector3 minimumPos, maximumPos;
 
-    private GameObject mover;
+    //private GameObject mover;
 
-        private float G;
+        /*private float G;
     public Rigidbody body;*/
 
     // Start is called before the first frame update
     void Start()
     {
-        predator = new Predator();
+        /*predator = new Predator();
         int numberOfMovers = 10;
         for (int i = 0; i < numberOfMovers; i++)
         {
@@ -38,25 +38,67 @@ public class Ecosystem2 : MonoBehaviour
             Ecosystem2Mover m = new Ecosystem2Mover(Random.Range(0.2f, 1f), randomVelocity, randomLocation); //Each Mover is initialized randomly.
             movers.Add(m);
         }
-        a = new EcosystemAttractor();
+        a = new EcosystemAttractor();*/
+
+        Vector2 randomVelocity = new Vector2(Random.Range(0f, 5f), Random.Range(0f, 5f));
+
+        //mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        GameObject.Destroy(this.gameObject.GetComponent<BoxCollider>());
+        transform = this.gameObject.transform;
+        this.gameObject.AddComponent<Rigidbody>();
+        body = this.gameObject.GetComponent<Rigidbody>();
+        body.useGravity = false;
+        Renderer renderer = this.gameObject.GetComponent<Renderer>();
+        renderer.material = new Material(Shader.Find("Diffuse"));
+        float randomMass = Random.Range(0.2f, 1f);
+        this.gameObject.transform.localScale = new Vector3(randomMass, randomMass, randomMass);
+
+        body.mass = 1;
+        body.position = this.gameObject.transform.position; // Default location
+        body.velocity = randomVelocity; // The extra velocity makes the mover orbit
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        foreach (Ecosystem2Mover m in movers)
+        /*foreach (Ecosystem2Mover m in movers)
         {
             Rigidbody body = m.body;
             Vector2 force = a.Attract(body) + predator.Repel(body); // Apply the attraction from the Attractor on each Mover object
             m.ApplyForce(force);
             m.Update();
+        }*/
+
+        Vector3 force = a.Attract(body) + predator.Repel(body);
+
+        body.AddForce(force, ForceMode.Force);
+        //Debug.Log(force);
+
+        Vector3 velocity = body.velocity;
+        if (transform.position.x > maximumPos.x || transform.position.x < minimumPos.x)
+        {
+            velocity.x *= -1 * Time.deltaTime;
         }
+        if (transform.position.y > maximumPos.y || transform.position.y < minimumPos.y)
+        {
+            velocity.y *= -1 * Time.deltaTime;
+        }
+        if (transform.position.z > maximumPos.z || transform.position.z < minimumPos.z)
+        {
+            velocity.z *= -1 * Time.deltaTime;
+        }
+        body.velocity = velocity;
     }
 
     void Update()
     {
-        predator.Update();
-        predator.CheckEdges();
+        //predator.Update();
+        //predator.CheckEdges();
+    }
+
+    void CheckEdges()
+    {
+
     }
 }
 

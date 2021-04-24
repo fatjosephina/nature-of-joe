@@ -4,16 +4,26 @@ using UnityEngine;
 
 public class Ecosystem3 : MonoBehaviour
 {
-    centralBody sphereBody;
+    GameObject sphereBody;
     List<oscillator> oscillators = new List<oscillator>();
     Vector3 oscillatorAvgPosition = Vector3.zero;
 
     void Start()
     {
-        sphereBody = new centralBody();
-        while (oscillators.Count < 10)
+        //sphereBody = new centralBody();
+
+        //sphereBody = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        Renderer renderer = this.gameObject.GetComponent<Renderer>();
+        renderer.material = new Material(Shader.Find("Diffuse"));
+        renderer.material.color = Color.red;
+        this.gameObject.transform.localScale = new Vector3(2, 2, 2);
+        while (oscillators.Count < 8)
         {
-            oscillators.Add(new oscillator(sphereBody.sphereBody.transform.position));
+            oscillators.Add(new oscillator(this.gameObject.transform.position));
+        }
+        foreach (oscillator o in oscillators)
+        {
+            o.oGameObject.transform.SetParent(this.gameObject.transform);
         }
     }
 
@@ -29,14 +39,15 @@ public class Ecosystem3 : MonoBehaviour
             //Add the oscillator's velocity to its angle
             o.angle += o.velocity;
             // Draw the line for each oscillator
-            o.lineRender.SetPosition(0, sphereBody.sphereBody.transform.position);
+            o.lineRender.SetPosition(0, this.gameObject.transform.position);
             o.lineRender.SetPosition(1, o.oGameObject.transform.position);
+            o.lineRender.transform.SetParent(this.gameObject.transform);
             //Move the oscillator
             o.oGameObject.transform.transform.Translate(new Vector2(x, y) * Time.deltaTime);
             oscillatorAvgPosition += o.oGameObject.transform.transform.position;
         }
         oscillatorAvgPosition = new Vector2(oscillatorAvgPosition.x / oscillators.Count, oscillatorAvgPosition.y / oscillators.Count);
-        sphereBody.sphereBody.transform.position = oscillatorAvgPosition;
+        this.gameObject.transform.position = oscillatorAvgPosition;
     }
 }
 
@@ -70,7 +81,7 @@ public class oscillator
 
     public oscillator(Vector3 sphereBodyPosition)
     {
-        findWindowLimits();
+        //findWindowLimits();
         angle = Vector2.zero;
         velocity = new Vector2(Random.Range(-.05f, .05f), Random.Range(-0.05f, 0.05f));
         amplitude = new Vector2(Random.Range(-maximumPos.x / 3, maximumPos.x / 3), Random.Range(-maximumPos.y / 3, maximumPos.y / 3));

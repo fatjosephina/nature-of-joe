@@ -7,6 +7,7 @@ TagManager:
   - Friction Wall
   - Chapter1Predator
   - Chapter2Predator
+  - Chapter3Predator
   layers:
   - Default
   - TransparentFX

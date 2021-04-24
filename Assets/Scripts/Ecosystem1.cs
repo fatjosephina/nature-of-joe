@@ -46,7 +46,7 @@ public class Ecosystem1 : MonoBehaviour
     void Update()
     {
         timer -= Time.deltaTime;
-        Debug.Log(timer);
+        //Debug.Log(timer);
         if (0f < timer && timer <= 1f)
             slither *= -1f;
         else if (timer <= 0f)
