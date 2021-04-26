@@ -596,8 +596,9 @@ MonoBehaviour:
   chapter3CreaturePopulation: 5
   chapter3MinimumPopulation: 0
   chapter6Creatures: []
-  chapter6Creature: {fileID: 0}
-  chapter6CreaturePopulation: 0
+  chapter6Creature: {fileID: 656149442428197765, guid: c0ad24d18015d0345a8f30c5f8b5207d,
+    type: 3}
+  chapter6CreaturePopulation: 20
   chapter6MinimumPopulation: 0
   chapter7Creatures: []
   chapter7Creature: {fileID: 0}

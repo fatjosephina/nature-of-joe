@@ -8,6 +8,7 @@ TagManager:
   - Chapter1Predator
   - Chapter2Predator
   - Chapter3Predator
+  - Chapter6Predator
   layers:
   - Default
   - TransparentFX

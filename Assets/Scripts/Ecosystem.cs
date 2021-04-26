@@ -61,6 +61,11 @@ public class Ecosystem : MonoBehaviour
             chapter3Creature = Instantiate(chapter3Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
             chapter3Creatures.Add(chapter3Creature);
         }
+        for (int i = 0; i < chapter6CreaturePopulation; i++)
+        {
+            chapter6Creature = Instantiate(chapter6Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            chapter6Creatures.Add(chapter6Creature);
+        }
     }
 
     // Update is called once per frame
@@ -77,6 +82,10 @@ public class Ecosystem : MonoBehaviour
         if (chapter3Creatures.Count <= chapter3MinimumPopulation)
         {
             StartCoroutine(circleOfLife(chapter3Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows))));
+        }
+        if (chapter6Creatures.Count <= chapter6MinimumPopulation)
+        {
+            StartCoroutine(circleOfLife(chapter6Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows))));
         }
     }
 
@@ -99,6 +108,12 @@ public class Ecosystem : MonoBehaviour
         {
             GameObject c = Instantiate(prey, position, Quaternion.identity);
             chapter3Creatures.Add(c);
+        }
+        yield return new WaitForSeconds(10);
+        if (prey.name == chapter6Creature.name || prey.name == chapter6Creature.name + "(Clone)")
+        {
+            GameObject c = Instantiate(prey, position, Quaternion.identity);
+            chapter6Creatures.Add(c);
         }
     }
 }
