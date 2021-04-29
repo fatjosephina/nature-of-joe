@@ -48,23 +48,23 @@ public class Ecosystem : MonoBehaviour
     {
         for (int i = 0; i < chapter1CreaturePopulation; i++)
         {
-            chapter1Creature = Instantiate(chapter1Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
-            chapter1Creatures.Add(chapter1Creature);
+            GameObject chapter1C = Instantiate(chapter1Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            chapter1Creatures.Add(chapter1C);
         }
         for (int i = 0; i < chapter2CreaturePopulation; i++)
         {
-            chapter2Creature = Instantiate(chapter2Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
-            chapter2Creatures.Add(chapter2Creature);
+            GameObject chapter2C = Instantiate(chapter2Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            chapter2Creatures.Add(chapter2C);
         }
         for (int i = 0; i < chapter3CreaturePopulation; i++)
         {
-            chapter3Creature = Instantiate(chapter3Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
-            chapter3Creatures.Add(chapter3Creature);
+            GameObject chapter3C = Instantiate(chapter3Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            chapter3Creatures.Add(chapter3C);
         }
         for (int i = 0; i < chapter6CreaturePopulation; i++)
         {
-            chapter6Creature = Instantiate(chapter6Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
-            chapter6Creatures.Add(chapter6Creature);
+            GameObject chapter6C = Instantiate(chapter6Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            chapter6Creatures.Add(chapter6C);
         }
     }
 

@@ -12,24 +12,24 @@ public class Ecosystem6 : MonoBehaviour
     public Mesh sphereMesh;*/
     public Mesh[] meshes = new Mesh[3];
 
-    private List<BoidChild> boids; // Declare a List of Vehicle objects.
-    private Vector2 minimumPos, maximumPos;
-    public static List<Ecosystem6> boidParents;
+    private Vector3 minimumPos, maximumPos;
+    public List<BoidParent> boidParents = new List<BoidParent>();
 
-    public Vector2 location
+    public Vector3 location
     {
         get { return myVehicle.transform.position; }
         set { myVehicle.transform.position = value; }
     }
-    public Vector2 velocity
+    public Vector3 velocity
     {
         get { return rb.velocity; }
         set { rb.velocity = value; }
     }
 
-    private List<BoidChild> boidColony;
+   // private 
+    private List<List<BoidChild>> boidChildren = new List<List<BoidChild>>();
     private float maxSpeed = 2, maxForce = 2;
-    private Vector2 minPos, maxPos;
+    private Vector3 minPos, maxPos;
     public GameObject myVehicle;
     private Rigidbody rb;
 
@@ -47,696 +47,545 @@ public class Ecosystem6 : MonoBehaviour
                 float ranX = Random.Range(-1.0f, 1.0f);
                 float ranY = Random.Range(-1.0f, 1.0f);
                 Mesh mesh = meshes[i];
-                boids.Add(new BoidChild(new Vector2(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce, mesh));
+                boids.Add(new BoidChild(new Vector3(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce, mesh));
             }
             float ranXParent = Random.Range(-1.0f, 1.0f);
             float ranYParent = Random.Range(-1.0f, 1.0f);
-            boidParents.Add(new BoidParent(new Vector2(ranXParent, ranYParent), minimumPos, maximumPos, maxSpeed, maxForce, boids));
+            boidParents.Add(new BoidParent(new Vector3(ranXParent, ranYParent), minimumPos, maximumPos, maxSpeed, maxForce, boids));
         }*/
-        for (int i = 0; i < 3; i++)
-        {
-            float ranX = Random.Range(-1.0f, 1.0f);
-            float ranY = Random.Range(-1.0f, 1.0f);
-            Mesh mesh = meshes[i];
-            boids.Add(new BoidChild(new Vector2(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce, mesh));
+
+        maximumPos = new Vector3(50f, 10f, 50f);
+        minimumPos = new Vector3(0f, 2f, 0f);
+
+
+            for (int j = 0; j < 10; j++)
+            {
+
+                List<BoidChild> boidColony = new List<BoidChild>();
+
+                for (int i = 0; i < 3; i++)
+                {
+                float ranX = Random.Range(0f, 10.0f);
+                float ranY = Random.Range(0f, 10.0f);
+                float ranZ = Random.Range(0f, 10.0f);
+                Mesh mesh = meshes[Random.Range(0,2)];
+                boidColony.Add(new BoidChild(new Vector3(ranX, ranY, ranZ), minimumPos, maximumPos, maxSpeed, maxForce, mesh));
+                boidChildren.Add(boidColony);
+
+                float randoX = Random.Range(0f, 20.0f);
+                    float randoY = Random.Range(0f, 20.0f);
+                    float randoZ = Random.Range(0f, 20.0f);
+                    boidParents.Add(new BoidParent(new Vector3(randoX, randoY, randoZ), minimumPos, maximumPos, maxSpeed, maxForce, boidChildren[j]));
+                }
+
+
+
         }
-        minPos = minPos - Vector2.one;
-        maxPos = maxPos + Vector2.one;
-
-        boidColony = boids;
-
-        myVehicle = this.gameObject;
-        float ranXParent = Random.Range(-1.0f, 1.0f);
-        float ranYParent = Random.Range(-1.0f, 1.0f);
-        myVehicle.transform.position = new Vector2(ranXParent, ranYParent);
-
-        myVehicle.AddComponent<Rigidbody>();
-        rb = myVehicle.GetComponent<Rigidbody>();
-        rb.constraints = RigidbodyConstraints.FreezeRotation;
-        rb.useGravity = false; // Remember to ignore gravity!
-        rb.mass = 100f;
-
-        foreach (BoidChild boid in boidColony)
-        {
-            boid.myVehicle.transform.SetParent(myVehicle.transform);
-        }
-        boidParents.Add(this);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Vector2 mousePos = Input.mousePosition;
+        //Vector3 mousePos = Input.mousePosition;
         //mousePos = Camera.main.ScreenToWorldPoint(mousePos);
 
 
-        foreach (Ecosystem6 v in boidParents)
+        for(int i = 0; i < boidChildren.Count; i++)
+        {
+            foreach (BoidChild w in boidChildren[i])
+            {
+                w.Flock(boidChildren[i], sep, ali, coh);
+            }
+        }
+
+
+
+        foreach (BoidParent v in boidParents)
         {
             v.Flock(boidParents, sep, ali, coh);
-            foreach (BoidChild w in v.boidColony)
+        }
+
+        //foreach (Ecosystem6 v in boidParents)
+        //{
+        //    v.Flock(boidParents, sep, ali, coh);
+        //    foreach (BoidChild w in v.boidColony)
+        //    {
+        //        w.Flock(v.boidColony, sep, ali, coh);
+        //    }
+        //}
+    }
+
+
+    public class BoidParent
+    {
+        public List<BoidChild> boidColony;
+        private float maxSpeed, maxForce;
+        private Vector3 minPos, maxPos;
+        public GameObject myVehicle;
+        private Rigidbody rb;
+
+        public Vector3 location
+        {
+            get { return myVehicle.transform.position; }
+            set { myVehicle.transform.position = value; }
+        }
+        public Vector3 velocity
+        {
+            get { return rb.velocity; }
+            set { rb.velocity = value; }
+        }
+
+        public BoidParent(Vector3 initPos, Vector3 _minPos, Vector3 _maxPos, float _maxSpeed, float _maxForce, List<BoidChild> boids)
+        {
+            minPos = _minPos - Vector3.one;
+            maxPos = _maxPos + Vector3.one;
+            maxSpeed = _maxSpeed;
+            maxForce = _maxForce;
+
+            boidColony = boids;
+
+            myVehicle = new GameObject();
+
+            myVehicle.transform.position = new Vector3(initPos.x, initPos.y, initPos.z);
+
+            myVehicle.AddComponent<Rigidbody>();
+            rb = myVehicle.GetComponent<Rigidbody>();
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            rb.useGravity = false; // Remember to ignore gravity!
+            rb.mass = 100f;
+
+            foreach (BoidChild boid in boidColony)
             {
-                w.Flock(v.boidColony, sep, ali, coh);
+                boid.myVehicle.transform.SetParent(myVehicle.transform);
             }
         }
-    }
 
-    private void findWindowLimits()
-    {
-        Camera.main.orthographic = true;
-        Camera.main.orthographicSize = 20;
-        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
-        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-    }
-
-    public void Flock(List<Ecosystem6> boids, float sepM, float aliM, float cohM)
-    {
-        Vector2 sep = Separate(boids); // The three flocking rules
-        Vector2 ali = Align(boids);
-        Vector2 coh = Cohesion(boids);
-
-        sep *= sepM; // Arbitrary weights for these forces (Try different ones!)
-        ali *= aliM;
-        coh *= cohM;
-
-        ApplyForce(sep); // Applying all the forces
-        ApplyForce(ali);
-        ApplyForce(coh);
-
-        checkBounds(); // To loop the world to the other side of the screen.
-        lookForward(); // Make the boids face forward.
-    }
-
-    public Vector2 Align(List<Ecosystem6> boids)
-    {
-        float neighborDist = 6f; // This is an arbitrary value and could vary from boid to boid.
-
-        /* Add up all the velocities and divide by the total to
-         * calculate the average velocity. */
-        Vector2 sum = Vector2.zero;
-        int count = 0;
-        foreach (Ecosystem6 other in boids)
+        public void Flock(List<BoidParent> boids, float sepM, float aliM, float cohM)
         {
-            if (other != this)
+            Vector3 sep = Separate(boids); // The three flocking rules
+            Vector3 ali = Align(boids);
+            Vector3 coh = Cohesion(boids);
+
+            sep *= sepM; // Arbitrary weights for these forces (Try different ones!)
+            ali *= aliM;
+            coh *= cohM;
+
+            ApplyForce(sep); // Applying all the forces
+            ApplyForce(ali);
+            ApplyForce(coh);
+
+            checkBounds(); // To loop the world to the other side of the screen.
+            lookForward(); // Make the boids face forward.
+        }
+
+        public Vector3 Align(List<BoidParent> boids)
+        {
+            float neighborDist = 6f; // This is an arbitrary value and could vary from boid to boid.
+
+            /* Add up all the velocities and divide by the total to
+             * calculate the average velocity. */
+            Vector3 sum = Vector3.zero;
+            int count = 0;
+            foreach (BoidParent other in boids)
             {
-                float d = Vector2.Distance(location, other.location);
-                if ((d > 0) && (d < neighborDist))
+                if (other != this)
                 {
-                    sum += other.velocity;
-                    count++; // For an average, we need to keep track of how many boids are within the distance.
+                    float d = Vector3.Distance(location, other.location);
+                    if ((d > 0) && (d < neighborDist))
+                    {
+                        sum += other.velocity;
+                        count++; // For an average, we need to keep track of how many boids are within the distance.
+                    }
                 }
             }
-        }
 
-        if (count > 0)
-        {
-            sum /= count;
-
-            sum = sum.normalized * maxSpeed; // We desite to go in that direction at maximum speed.
-
-            Vector2 steer = sum - velocity; // Reynolds's steering force formula.
-            steer = Vector2.ClampMagnitude(steer, maxForce);
-            return steer;
-        }
-        else
-        {
-            return Vector2.zero; // If we don't find any close boids, the steering force is Zero.
-        }
-    }
-
-    public Vector2 Cohesion(List<Ecosystem6> boids)
-    {
-        float neighborDist = 6f;
-        Vector2 sum = Vector2.zero;
-        int count = 0;
-        foreach (Ecosystem6 other in boids)
-        {
-            if (other != this)
+            if (count > 0)
             {
-                float d = Vector2.Distance(location, other.location);
-                if ((d > 0) && (d < neighborDist))
-                {
-                    sum += other.location; // Adding up all the other's locations
-                    count++;
-                }
+                sum /= count;
+
+                sum = sum.normalized * maxSpeed; // We desite to go in that direction at maximum speed.
+
+                Vector3 steer = sum - velocity; // Reynolds's steering force formula.
+                steer = Vector3.ClampMagnitude(steer, maxForce);
+                return steer;
             }
-        }
-        if (count > 0)
-        {
-            sum /= count;
-            /* Here we make use of the Seek() function we wrote in
-             * Example 6.8. The target we seek is thr average
-             * location of our neighbors. */
-            return Seek(sum);
-        }
-        else
-        {
-            return Vector2.zero;
-        }
-    }
-
-    public Vector2 Seek(Vector2 target)
-    {
-        Vector2 desired = target - location;
-        desired.Normalize();
-        desired *= maxSpeed;
-        Vector2 steer = desired - velocity;
-        steer = Vector2.ClampMagnitude(steer, maxForce);
-
-        return steer;
-    }
-
-    public Vector2 Separate(List<Ecosystem6> boids)
-    {
-        Vector2 sum = Vector2.zero;
-        int count = 0;
-
-        float desiredSeperation = myVehicle.transform.localScale.x * 2;
-
-        foreach (Ecosystem6 other in boids)
-        {
-            if (other != this)
+            else
             {
-                float d = Vector2.Distance(other.location, location);
-
-                if ((d > 0) && (d < desiredSeperation))
-                {
-                    Vector2 diff = location - other.location;
-                    diff.Normalize();
-
-                    diff /= d;
-
-                    sum += diff;
-                    count++;
-                }
+                return Vector3.zero; // If we don't find any close boids, the steering force is Zero.
             }
         }
 
-        if (count > 0)
+        public Vector3 Cohesion(List<BoidParent> boids)
         {
-            sum /= count;
-
-            sum *= maxSpeed;
-
-            Vector2 steer = sum - velocity;
-            steer = Vector2.ClampMagnitude(steer, maxForce);
-
-
-            return steer;
-        }
-        return Vector2.zero;
-    }
-
-    public void ApplyForce(Vector2 force)
-    {
-        rb.AddForce(force);
-    }
-
-    private void checkBounds()
-    {
-        if (location.x > maxPos.x)
-        {
-            location = new Vector2(minPos.x, location.y);
-        }
-        else if (location.x < minPos.x)
-        {
-            location = new Vector2(maxPos.x, location.y);
-        }
-        if (location.y > maxPos.y)
-        {
-            location = new Vector2(location.x, minPos.y);
-        }
-        else if (location.y < minPos.y)
-        {
-            location = new Vector2(location.x, maxPos.y);
-        }
-    }
-
-    private void lookForward()
-    {
-        /* We want our boids to face the same direction
-         * that they're going. To do that, we take our location
-         * and velocity to see where we're heading. */
-        Vector2 futureLocation = location + velocity;
-        myVehicle.transform.LookAt(futureLocation); // We can use the built in 'LookAt' function to automatically face us the right direction
-
-        /* In the case our model is facing the wrong direction,
-         * we can adjust it using Eular Angles. */
-        Vector3 eular = myVehicle.transform.rotation.eulerAngles;
-        myVehicle.transform.rotation = Quaternion.Euler(eular.x + 90, eular.y + 0, eular.z + 0); // Adjust these numbers to make the boids face different directions!
-    }
-}
-
-class BoidParent
-{
-    public List<BoidChild> boidColony;
-    private float maxSpeed, maxForce;
-    private Vector2 minPos, maxPos;
-    public GameObject myVehicle;
-    private Rigidbody rb;
-
-    public Vector2 location
-    {
-        get { return myVehicle.transform.position; }
-        set { myVehicle.transform.position = value; }
-    }
-    public Vector2 velocity
-    {
-        get { return rb.velocity; }
-        set { rb.velocity = value; }
-    }
-
-    public BoidParent(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce, List<BoidChild> boids)
-    {
-        minPos = _minPos - Vector2.one;
-        maxPos = _maxPos + Vector2.one;
-        maxSpeed = _maxSpeed;
-        maxForce = _maxForce;
-
-        boidColony = boids;
-
-        myVehicle = new GameObject();
-
-        myVehicle.transform.position = new Vector2(initPos.x, initPos.y);
-
-        myVehicle.AddComponent<Rigidbody>();
-        rb = myVehicle.GetComponent<Rigidbody>();
-        rb.constraints = RigidbodyConstraints.FreezeRotation;
-        rb.useGravity = false; // Remember to ignore gravity!
-        rb.mass = 100f;
-
-        foreach (BoidChild boid in boidColony)
-        {
-            boid.myVehicle.transform.SetParent(myVehicle.transform);
-        }
-    }
-
-    public void Flock(List<BoidParent> boids, float sepM, float aliM, float cohM)
-    {
-        Vector2 sep = Separate(boids); // The three flocking rules
-        Vector2 ali = Align(boids);
-        Vector2 coh = Cohesion(boids);
-
-        sep *= sepM; // Arbitrary weights for these forces (Try different ones!)
-        ali *= aliM;
-        coh *= cohM;
-
-        ApplyForce(sep); // Applying all the forces
-        ApplyForce(ali);
-        ApplyForce(coh);
-
-        checkBounds(); // To loop the world to the other side of the screen.
-        lookForward(); // Make the boids face forward.
-    }
-
-    public Vector2 Align(List<BoidParent> boids)
-    {
-        float neighborDist = 6f; // This is an arbitrary value and could vary from boid to boid.
-
-        /* Add up all the velocities and divide by the total to
-         * calculate the average velocity. */
-        Vector2 sum = Vector2.zero;
-        int count = 0;
-        foreach (BoidParent other in boids)
-        {
-            if (other != this)
+            float neighborDist = 6f;
+            Vector3 sum = Vector3.zero;
+            int count = 0;
+            foreach (BoidParent other in boids)
             {
-                float d = Vector2.Distance(location, other.location);
-                if ((d > 0) && (d < neighborDist))
+                if (other != this)
                 {
-                    sum += other.velocity;
-                    count++; // For an average, we need to keep track of how many boids are within the distance.
+                    float d = Vector3.Distance(location, other.location);
+                    if ((d > 0) && (d < neighborDist))
+                    {
+                        sum += other.location; // Adding up all the other's locations
+                        count++;
+                    }
                 }
+            }
+            if (count > 0)
+            {
+                sum /= count;
+                /* Here we make use of the Seek() function we wrote in
+                 * Example 6.8. The target we seek is thr average
+                 * location of our neighbors. */
+                return Seek(sum);
+            }
+            else
+            {
+                return Vector3.zero;
             }
         }
 
-        if (count > 0)
+        public Vector3 Seek(Vector3 target)
         {
-            sum /= count;
-
-            sum = sum.normalized * maxSpeed; // We desite to go in that direction at maximum speed.
-
-            Vector2 steer = sum - velocity; // Reynolds's steering force formula.
-            steer = Vector2.ClampMagnitude(steer, maxForce);
-            return steer;
-        }
-        else
-        {
-            return Vector2.zero; // If we don't find any close boids, the steering force is Zero.
-        }
-    }
-
-    public Vector2 Cohesion(List<BoidParent> boids)
-    {
-        float neighborDist = 6f;
-        Vector2 sum = Vector2.zero;
-        int count = 0;
-        foreach (BoidParent other in boids)
-        {
-            if (other != this)
-            {
-                float d = Vector2.Distance(location, other.location);
-                if ((d > 0) && (d < neighborDist))
-                {
-                    sum += other.location; // Adding up all the other's locations
-                    count++;
-                }
-            }
-        }
-        if (count > 0)
-        {
-            sum /= count;
-            /* Here we make use of the Seek() function we wrote in
-             * Example 6.8. The target we seek is thr average
-             * location of our neighbors. */
-            return Seek(sum);
-        }
-        else
-        {
-            return Vector2.zero;
-        }
-    }
-
-    public Vector2 Seek(Vector2 target)
-    {
-        Vector2 desired = target - location;
-        desired.Normalize();
-        desired *= maxSpeed;
-        Vector2 steer = desired - velocity;
-        steer = Vector2.ClampMagnitude(steer, maxForce);
-
-        return steer;
-    }
-
-    public Vector2 Separate(List<BoidParent> boids)
-    {
-        Vector2 sum = Vector2.zero;
-        int count = 0;
-
-        float desiredSeperation = myVehicle.transform.localScale.x * 2;
-
-        foreach (BoidParent other in boids)
-        {
-            if (other != this)
-            {
-                float d = Vector2.Distance(other.location, location);
-
-                if ((d > 0) && (d < desiredSeperation))
-                {
-                    Vector2 diff = location - other.location;
-                    diff.Normalize();
-
-                    diff /= d;
-
-                    sum += diff;
-                    count++;
-                }
-            }
-        }
-
-        if (count > 0)
-        {
-            sum /= count;
-
-            sum *= maxSpeed;
-
-            Vector2 steer = sum - velocity;
-            steer = Vector2.ClampMagnitude(steer, maxForce);
-
+            Vector3 desired = target - location;
+            desired.Normalize();
+            desired *= maxSpeed;
+            Vector3 steer = desired - velocity;
+            steer = Vector3.ClampMagnitude(steer, maxForce);
 
             return steer;
         }
-        return Vector2.zero;
-    }
 
-    public void ApplyForce(Vector2 force)
-    {
-        rb.AddForce(force);
-    }
-
-    private void checkBounds()
-    {
-        if (location.x > maxPos.x)
+        public Vector3 Separate(List<BoidParent> boids)
         {
-            location = new Vector2(minPos.x, location.y);
-        }
-        else if (location.x < minPos.x)
-        {
-            location = new Vector2(maxPos.x, location.y);
-        }
-        if (location.y > maxPos.y)
-        {
-            location = new Vector2(location.x, minPos.y);
-        }
-        else if (location.y < minPos.y)
-        {
-            location = new Vector2(location.x, maxPos.y);
-        }
-    }
+            Vector3 sum = Vector3.zero;
+            int count = 0;
 
-    private void lookForward()
-    {
-        /* We want our boids to face the same direction
-         * that they're going. To do that, we take our location
-         * and velocity to see where we're heading. */
-        Vector2 futureLocation = location + velocity;
-        myVehicle.transform.LookAt(futureLocation); // We can use the built in 'LookAt' function to automatically face us the right direction
+            float desiredSeperation = myVehicle.transform.localScale.x * 2;
 
-        /* In the case our model is facing the wrong direction,
-         * we can adjust it using Eular Angles. */
-        Vector3 eular = myVehicle.transform.rotation.eulerAngles;
-        myVehicle.transform.rotation = Quaternion.Euler(eular.x + 90, eular.y + 0, eular.z + 0); // Adjust these numbers to make the boids face different directions!
-    }
-}
-
-class BoidChild
-{
-    // To make it easier on ourselves, we use Get and Set as quick ways to get the location of the vehicle
-    public Vector2 location
-    {
-        get { return myVehicle.transform.position; }
-        set { myVehicle.transform.position = value; }
-    }
-    public Vector2 velocity
-    {
-        get { return rb.velocity; }
-        set { rb.velocity = value; }
-    }
-
-    private float maxSpeed, maxForce;
-    private Vector2 minPos, maxPos;
-    public GameObject myVehicle;
-    private Rigidbody rb;
-
-    public BoidChild(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce, Mesh coneMesh)
-    {
-        minPos = _minPos - Vector2.one;
-        maxPos = _maxPos + Vector2.one;
-        maxSpeed = _maxSpeed;
-        maxForce = _maxForce;
-
-        myVehicle = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        Renderer renderer = myVehicle.GetComponent<Renderer>();
-        renderer.material = new Material(Shader.Find("Diffuse"));
-        renderer.material.color = Color.red;
-        GameObject.Destroy(myVehicle.GetComponent<BoxCollider>());
-
-        myVehicle.transform.position = new Vector2(initPos.x, initPos.y);
-
-        myVehicle.AddComponent<Rigidbody>();
-        rb = myVehicle.GetComponent<Rigidbody>();
-        rb.constraints = RigidbodyConstraints.FreezeRotation;
-        rb.useGravity = false; // Remember to ignore gravity!
-
-
-        /* We want to double check if a custom mesh is
-         * being used. If not, we will scale a cube up
-         * instead ans use that for our boids. */
-        if (coneMesh != null)
-        {
-            MeshFilter filter = myVehicle.GetComponent<MeshFilter>();
-            filter.mesh = coneMesh;
-        }
-        else
-        {
-            myVehicle.transform.localScale = new Vector3(1f, 2f, 1f);
-        }
-    }
-
-    private void checkBounds()
-    {
-        if (location.x > maxPos.x)
-        {
-            location = new Vector2(minPos.x, location.y);
-        }
-        else if (location.x < minPos.x)
-        {
-            location = new Vector2(maxPos.x, location.y);
-        }
-        if (location.y > maxPos.y)
-        {
-            location = new Vector2(location.x, minPos.y);
-        }
-        else if (location.y < minPos.y)
-        {
-            location = new Vector2(location.x, maxPos.y);
-        }
-    }
-
-    private void lookForward()
-    {
-        /* We want our boids to face the same direction
-         * that they're going. To do that, we take our location
-         * and velocity to see where we're heading. */
-        Vector2 futureLocation = location + velocity;
-        myVehicle.transform.LookAt(futureLocation); // We can use the built in 'LookAt' function to automatically face us the right direction
-
-        /* In the case our model is facing the wrong direction,
-         * we can adjust it using Eular Angles. */
-        Vector3 eular = myVehicle.transform.rotation.eulerAngles;
-        myVehicle.transform.rotation = Quaternion.Euler(eular.x + 90, eular.y + 0, eular.z + 0); // Adjust these numbers to make the boids face different directions!
-    }
-
-    public void Flock(List<BoidChild> boids, float sepM, float aliM, float cohM)
-    {
-        Vector2 sep = Separate(boids); // The three flocking rules
-        Vector2 ali = Align(boids);
-        Vector2 coh = Cohesion(boids);
-
-        sep *= sepM; // Arbitrary weights for these forces (Try different ones!)
-        ali *= aliM;
-        coh *= cohM;
-
-        ApplyForce(sep); // Applying all the forces
-        ApplyForce(ali);
-        ApplyForce(coh);
-
-        checkBounds(); // To loop the world to the other side of the screen.
-        lookForward(); // Make the boids face forward.
-    }
-
-    public Vector2 Align(List<BoidChild> boids)
-    {
-        float neighborDist = 30f; // This is an arbitrary value and could vary from boid to boid.
-
-        /* Add up all the velocities and divide by the total to
-         * calculate the average velocity. */
-        Vector2 sum = Vector2.zero;
-        int count = 0;
-        foreach (BoidChild other in boids)
-        {
-            if (other != this)
+            foreach (BoidParent other in boids)
             {
-                float d = Vector2.Distance(location, other.location);
-                if ((d > 0) && (d < neighborDist))
+                if (other != this)
                 {
-                    sum += other.velocity;
-                    count++; // For an average, we need to keep track of how many boids are within the distance.
+                    float d = Vector3.Distance(other.location, location);
+
+                    if ((d > 0) && (d < desiredSeperation))
+                    {
+                        Vector3 diff = location - other.location;
+                        diff.Normalize();
+
+                        diff /= d;
+
+                        sum += diff;
+                        count++;
+                    }
                 }
+            }
+
+            if (count > 0)
+            {
+                sum /= count;
+
+                sum *= maxSpeed;
+
+                Vector3 steer = sum - velocity;
+                steer = Vector3.ClampMagnitude(steer, maxForce);
+
+
+                return steer;
+            }
+            return Vector3.zero;
+        }
+
+        public void ApplyForce(Vector3 force)
+        {
+            rb.AddForce(force);
+        }
+
+        private void checkBounds()
+        {
+            if (location.x > maxPos.x)
+            {
+                location = new Vector3(minPos.x, location.y);
+            }
+            else if (location.x < minPos.x)
+            {
+                location = new Vector3(maxPos.x, location.y);
+            }
+            if (location.y > maxPos.y)
+            {
+                location = new Vector3(location.x, minPos.y);
+            }
+            else if (location.y < minPos.y)
+            {
+                location = new Vector3(location.x, maxPos.y);
+            }
+            if(location.z > maxPos.z)
+            {
+                location = new Vector3(location.x, location.y, minPos.z);
+            }
+            else if (location.z < minPos.z)
+            {
+                location = new Vector3(location.x, location.y, maxPos.z);
             }
         }
 
-        if (count > 0)
+        private void lookForward()
         {
-            sum /= count;
+            /* We want our boids to face the same direction
+             * that they're going. To do that, we take our location
+             * and velocity to see where we're heading. */
+            Vector3 futureLocation = location + velocity;
+            myVehicle.transform.LookAt(futureLocation); // We can use the built in 'LookAt' function to automatically face us the right direction
 
-            sum = sum.normalized * maxSpeed; // We desite to go in that direction at maximum speed.
+            /* In the case our model is facing the wrong direction,
+             * we can adjust it using Eular Angles. */
+            Vector3 eular = myVehicle.transform.rotation.eulerAngles;
+            myVehicle.transform.rotation = Quaternion.Euler(eular.x + 90, eular.y + 0, eular.z + 0); // Adjust these numbers to make the boids face different directions!
+        }
+    }
 
-            Vector2 steer = sum - velocity; // Reynolds's steering force formula.
-            steer = Vector2.ClampMagnitude(steer, maxForce);
+    public class BoidChild
+    {
+        // To make it easier on ourselves, we use Get and Set as quick ways to get the location of the vehicle
+        public Vector3 location
+        {
+            get { return myVehicle.transform.position; }
+            set { myVehicle.transform.position = value; }
+        }
+        public Vector3 velocity
+        {
+            get { return rb.velocity; }
+            set { rb.velocity = value; }
+        }
+
+        private float maxSpeed, maxForce;
+        private Vector3 minPos, maxPos;
+        public GameObject myVehicle;
+        public Rigidbody rb;
+
+        public BoidChild(Vector3 initPos, Vector3 _minPos, Vector3 _maxPos, float _maxSpeed, float _maxForce, Mesh coneMesh)
+        {
+            minPos = _minPos - Vector3.one;
+            maxPos = _maxPos + Vector3.one;
+            maxSpeed = _maxSpeed;
+            maxForce = _maxForce;
+
+            myVehicle = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            Renderer renderer = myVehicle.GetComponent<Renderer>();
+            renderer.material = new Material(Shader.Find("Diffuse"));
+            renderer.material.color = Color.red;
+            GameObject.Destroy(myVehicle.GetComponent<BoxCollider>());
+
+            myVehicle.transform.position = new Vector3(initPos.x, initPos.y, initPos.z);
+
+            myVehicle.AddComponent<Rigidbody>();
+            rb = myVehicle.GetComponent<Rigidbody>();
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            rb.useGravity = false; // Remember to ignore gravity!
+
+
+            /* We want to double check if a custom mesh is
+             * being used. If not, we will scale a cube up
+             * instead ans use that for our boids. */
+            if (coneMesh != null)
+            {
+                MeshFilter filter = myVehicle.GetComponent<MeshFilter>();
+                filter.mesh = coneMesh;
+            }
+            else
+            {
+                myVehicle.transform.localScale = new Vector3(1f, 2f, 1f);
+            }
+        }
+
+        private void checkBounds()
+        {
+            if (location.x > maxPos.x)
+            {
+                location = new Vector3(minPos.x, location.y);
+            }
+            else if (location.x < minPos.x)
+            {
+                location = new Vector3(maxPos.x, location.y);
+            }
+            if (location.y > maxPos.y)
+            {
+                location = new Vector3(location.x, minPos.y);
+            }
+            else if (location.y < minPos.y)
+            {
+                location = new Vector3(location.x, maxPos.y);
+            }
+            if (location.z > maxPos.z)
+            {
+                location = new Vector3(location.x, location.y, minPos.z);
+            }
+            else if (location.z < minPos.z)
+            {
+                location = new Vector3(location.x, location.y, maxPos.z);
+            }
+        }
+
+        private void lookForward()
+        {
+            location = myVehicle.transform.position;
+            /* We want our boids to face the same direction
+             * that they're going. To do that, we take our location
+             * and velocity to see where we're heading. */
+            Vector3 futureLocation = location + velocity;
+            myVehicle.transform.LookAt(futureLocation); // We can use the built in 'LookAt' function to automatically face us the right direction
+
+            /* In the case our model is facing the wrong direction,
+             * we can adjust it using Eular Angles. */
+            Vector3 eular = myVehicle.transform.rotation.eulerAngles;
+            myVehicle.transform.rotation = Quaternion.Euler(eular.x + 90, eular.y + 0, eular.z + 0); // Adjust these numbers to make the boids face different directions!
+        }
+
+        public void Flock(List<BoidChild> boids, float sepM, float aliM, float cohM)
+        {
+            lookForward();
+            Vector3 sep = Separate(boids); // The three flocking rules
+            Vector3 ali = Align(boids);
+            Vector3 coh = Cohesion(boids);
+
+            sep *= sepM; // Arbitrary weights for these forces (Try different ones!)
+            ali *= aliM;
+            coh *= cohM;
+
+            ApplyForce(sep); // Applying all the forces
+            ApplyForce(ali);
+            ApplyForce(coh);
+
+            checkBounds(); // To loop the world to the other side of the screen.
+            //lookForward(); // Make the boids face forward.
+        }
+
+        public Vector3 Align(List<BoidChild> boids)
+        {
+            float neighborDist = 30f; // This is an arbitrary value and could vary from boid to boid.
+
+            /* Add up all the velocities and divide by the total to
+             * calculate the average velocity. */
+            Vector3 sum = Vector3.zero;
+            int count = 0;
+            foreach (BoidChild other in boids)
+            {
+                if (other != this)
+                {
+                    float d = Vector3.Distance(location, other.location);
+                    if ((d > 0) && (d < neighborDist))
+                    {
+                        sum += other.velocity;
+                        count++; // For an average, we need to keep track of how many boids are within the distance.
+                    }
+                }
+            }
+
+            if (count > 0)
+            {
+                sum /= count;
+
+                sum = sum.normalized * maxSpeed; // We desite to go in that direction at maximum speed.
+
+                Vector3 steer = sum - velocity; // Reynolds's steering force formula.
+                steer = Vector3.ClampMagnitude(steer, maxForce);
+                return steer;
+            }
+            else
+            {
+                return Vector3.zero; // If we don't find any close boids, the steering force is Zero.
+            }
+        }
+
+        public Vector3 Cohesion(List<BoidChild> boids)
+        {
+            float neighborDist = 30f;
+            Vector3 sum = Vector3.zero;
+            int count = 0;
+            foreach (BoidChild other in boids)
+            {
+                if (other != this)
+                {
+                    float d = Vector3.Distance(location, other.location);
+                    if ((d > 0) && (d < neighborDist))
+                    {
+                        sum += other.location; // Adding up all the other's locations
+                        count++;
+                    }
+                }
+            }
+            if (count > 0)
+            {
+                sum /= count;
+                /* Here we make use of the Seek() function we wrote in
+                 * Example 6.8. The target we seek is thr average
+                 * location of our neighbors. */
+                return Seek(sum);
+            }
+            else
+            {
+                return Vector3.zero;
+            }
+        }
+
+        public Vector3 Seek(Vector3 target)
+        {
+            Vector3 desired = target - location;
+            desired.Normalize();
+            desired *= maxSpeed;
+            Vector3 steer = desired - velocity;
+            steer = Vector3.ClampMagnitude(steer, maxForce);
+
             return steer;
         }
-        else
-        {
-            return Vector2.zero; // If we don't find any close boids, the steering force is Zero.
-        }
-    }
 
-    public Vector2 Cohesion(List<BoidChild> boids)
-    {
-        float neighborDist = 30f;
-        Vector2 sum = Vector2.zero;
-        int count = 0;
-        foreach (BoidChild other in boids)
+        public Vector3 Separate(List<BoidChild> boids)
         {
-            if (other != this)
+            Vector3 sum = Vector3.zero;
+            int count = 0;
+
+            float desiredSeperation = myVehicle.transform.localScale.x * 2;
+
+            foreach (BoidChild other in boids)
             {
-                float d = Vector2.Distance(location, other.location);
-                if ((d > 0) && (d < neighborDist))
+                if (other != this)
                 {
-                    sum += other.location; // Adding up all the other's locations
-                    count++;
+                    float d = Vector3.Distance(other.location, location);
+
+                    if ((d > 0) && (d < desiredSeperation))
+                    {
+                        Vector3 diff = location - other.location;
+                        diff.Normalize();
+
+                        diff /= d;
+
+                        sum += diff;
+                        count++;
+                    }
                 }
             }
-        }
-        if (count > 0)
-        {
-            sum /= count;
-            /* Here we make use of the Seek() function we wrote in
-             * Example 6.8. The target we seek is thr average
-             * location of our neighbors. */
-            return Seek(sum);
-        }
-        else
-        {
-            return Vector2.zero;
-        }
-    }
 
-    public Vector2 Seek(Vector2 target)
-    {
-        Vector2 desired = target - location;
-        desired.Normalize();
-        desired *= maxSpeed;
-        Vector2 steer = desired - velocity;
-        steer = Vector2.ClampMagnitude(steer, maxForce);
-
-        return steer;
-    }
-
-    public Vector2 Separate(List<BoidChild> boids)
-    {
-        Vector2 sum = Vector2.zero;
-        int count = 0;
-
-        float desiredSeperation = myVehicle.transform.localScale.x * 2;
-
-        foreach (BoidChild other in boids)
-        {
-            if (other != this)
+            if (count > 0)
             {
-                float d = Vector2.Distance(other.location, location);
+                sum /= count;
 
-                if ((d > 0) && (d < desiredSeperation))
-                {
-                    Vector2 diff = location - other.location;
-                    diff.Normalize();
+                sum *= maxSpeed;
 
-                    diff /= d;
+                Vector3 steer = sum - velocity;
+                steer = Vector3.ClampMagnitude(steer, maxForce);
 
-                    sum += diff;
-                    count++;
-                }
+
+                return steer;
             }
+            return Vector3.zero;
         }
 
-        if (count > 0)
+        public void ApplyForce(Vector3 force)
         {
-            sum /= count;
-
-            sum *= maxSpeed;
-
-            Vector2 steer = sum - velocity;
-            steer = Vector2.ClampMagnitude(steer, maxForce);
-
-
-            return steer;
+            rb.AddForce(force);
         }
-        return Vector2.zero;
-    }
-
-    public void ApplyForce(Vector2 force)
-    {
-        rb.AddForce(force);
     }
 }
 
@@ -756,7 +605,7 @@ class BoidChild
 //    public Mesh[] meshes = new Mesh[3];
 
 //    private List<BoidChild> boids; // Declare a List of Vehicle objects.
-//    private Vector2 minimumPos, maximumPos;
+//    private Vector3 minimumPos, maximumPos;
 //    private List<BoidParent> boidParents;
 
 //    // Start is called before the first frame update
@@ -773,18 +622,18 @@ class BoidChild
 //                float ranX = Random.Range(-1.0f, 1.0f);
 //                float ranY = Random.Range(-1.0f, 1.0f);
 //                Mesh mesh = meshes[i];
-//                boids.Add(new BoidChild(new Vector2(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce, mesh));
+//                boids.Add(new BoidChild(new Vector3(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce, mesh));
 //            }
 //            float ranXParent = Random.Range(-1.0f, 1.0f);
 //            float ranYParent = Random.Range(-1.0f, 1.0f);
-//            boidParents.Add(new BoidParent(new Vector2(ranXParent, ranYParent), minimumPos, maximumPos, maxSpeed, maxForce, boids));
+//            boidParents.Add(new BoidParent(new Vector3(ranXParent, ranYParent), minimumPos, maximumPos, maxSpeed, maxForce, boids));
 //        }
 //    }
 
 //    // Update is called once per frame
 //    void Update()
 //    {
-//        Vector2 mousePos = Input.mousePosition;
+//        Vector3 mousePos = Input.mousePosition;
 //        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
 
 
@@ -802,8 +651,8 @@ class BoidChild
 //    {
 //        Camera.main.orthographic = true;
 //        Camera.main.orthographicSize = 20;
-//        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
-//        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+//        minimumPos = Camera.main.ScreenToWorldPoint(Vector3.zero);
+//        maximumPos = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
 //    }
 //}
 
@@ -811,25 +660,25 @@ class BoidChild
 //{
 //    public List<BoidChild> boidColony;
 //    private float maxSpeed, maxForce;
-//    private Vector2 minPos, maxPos;
+//    private Vector3 minPos, maxPos;
 //    public GameObject myVehicle;
 //    private Rigidbody rb;
 
-//    public Vector2 location
+//    public Vector3 location
 //    {
 //        get { return myVehicle.transform.position; }
 //        set { myVehicle.transform.position = value; }
 //    }
-//    public Vector2 velocity
+//    public Vector3 velocity
 //    {
 //        get { return rb.velocity; }
 //        set { rb.velocity = value; }
 //    }
 
-//    public BoidParent(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce, List<BoidChild> boids)
+//    public BoidParent(Vector3 initPos, Vector3 _minPos, Vector3 _maxPos, float _maxSpeed, float _maxForce, List<BoidChild> boids)
 //    {
-//        minPos = _minPos - Vector2.one;
-//        maxPos = _maxPos + Vector2.one;
+//        minPos = _minPos - Vector3.one;
+//        maxPos = _maxPos + Vector3.one;
 //        maxSpeed = _maxSpeed;
 //        maxForce = _maxForce;
 
@@ -837,7 +686,7 @@ class BoidChild
 
 //        myVehicle = new GameObject();
 
-//        myVehicle.transform.position = new Vector2(initPos.x, initPos.y);
+//        myVehicle.transform.position = new Vector3(initPos.x, initPos.y);
 
 //        myVehicle.AddComponent<Rigidbody>();
 //        rb = myVehicle.GetComponent<Rigidbody>();
@@ -853,9 +702,9 @@ class BoidChild
 
 //    public void Flock(List<BoidParent> boids, float sepM, float aliM, float cohM)
 //    {
-//        Vector2 sep = Separate(boids); // The three flocking rules
-//        Vector2 ali = Align(boids);
-//        Vector2 coh = Cohesion(boids);
+//        Vector3 sep = Separate(boids); // The three flocking rules
+//        Vector3 ali = Align(boids);
+//        Vector3 coh = Cohesion(boids);
 
 //        sep *= sepM; // Arbitrary weights for these forces (Try different ones!)
 //        ali *= aliM;
@@ -869,19 +718,19 @@ class BoidChild
 //        lookForward(); // Make the boids face forward.
 //    }
 
-//    public Vector2 Align(List<BoidParent> boids)
+//    public Vector3 Align(List<BoidParent> boids)
 //    {
 //        float neighborDist = 6f; // This is an arbitrary value and could vary from boid to boid.
 
 //        /* Add up all the velocities and divide by the total to
 //         * calculate the average velocity. */
-//        Vector2 sum = Vector2.zero;
+//        Vector3 sum = Vector3.zero;
 //        int count = 0;
 //        foreach (BoidParent other in boids)
 //        {
 //            if (other != this)
 //            {
-//                float d = Vector2.Distance(location, other.location);
+//                float d = Vector3.Distance(location, other.location);
 //                if ((d > 0) && (d < neighborDist))
 //                {
 //                    sum += other.velocity;
@@ -896,26 +745,26 @@ class BoidChild
 
 //            sum = sum.normalized * maxSpeed; // We desite to go in that direction at maximum speed.
 
-//            Vector2 steer = sum - velocity; // Reynolds's steering force formula.
-//            steer = Vector2.ClampMagnitude(steer, maxForce);
+//            Vector3 steer = sum - velocity; // Reynolds's steering force formula.
+//            steer = Vector3.ClampMagnitude(steer, maxForce);
 //            return steer;
 //        }
 //        else
 //        {
-//            return Vector2.zero; // If we don't find any close boids, the steering force is Zero.
+//            return Vector3.zero; // If we don't find any close boids, the steering force is Zero.
 //        }
 //    }
 
-//    public Vector2 Cohesion(List<BoidParent> boids)
+//    public Vector3 Cohesion(List<BoidParent> boids)
 //    {
 //        float neighborDist = 6f;
-//        Vector2 sum = Vector2.zero;
+//        Vector3 sum = Vector3.zero;
 //        int count = 0;
 //        foreach (BoidParent other in boids)
 //        {
 //            if (other != this)
 //            {
-//                float d = Vector2.Distance(location, other.location);
+//                float d = Vector3.Distance(location, other.location);
 //                if ((d > 0) && (d < neighborDist))
 //                {
 //                    sum += other.location; // Adding up all the other's locations
@@ -933,24 +782,24 @@ class BoidChild
 //        }
 //        else
 //        {
-//            return Vector2.zero;
+//            return Vector3.zero;
 //        }
 //    }
 
-//    public Vector2 Seek(Vector2 target)
+//    public Vector3 Seek(Vector3 target)
 //    {
-//        Vector2 desired = target - location;
+//        Vector3 desired = target - location;
 //        desired.Normalize();
 //        desired *= maxSpeed;
-//        Vector2 steer = desired - velocity;
-//        steer = Vector2.ClampMagnitude(steer, maxForce);
+//        Vector3 steer = desired - velocity;
+//        steer = Vector3.ClampMagnitude(steer, maxForce);
 
 //        return steer;
 //    }
 
-//    public Vector2 Separate(List<BoidParent> boids)
+//    public Vector3 Separate(List<BoidParent> boids)
 //    {
-//        Vector2 sum = Vector2.zero;
+//        Vector3 sum = Vector3.zero;
 //        int count = 0;
 
 //        float desiredSeperation = myVehicle.transform.localScale.x * 2;
@@ -959,11 +808,11 @@ class BoidChild
 //        {
 //            if (other != this)
 //            {
-//                float d = Vector2.Distance(other.location, location);
+//                float d = Vector3.Distance(other.location, location);
 
 //                if ((d > 0) && (d < desiredSeperation))
 //                {
-//                    Vector2 diff = location - other.location;
+//                    Vector3 diff = location - other.location;
 //                    diff.Normalize();
 
 //                    diff /= d;
@@ -980,16 +829,16 @@ class BoidChild
 
 //            sum *= maxSpeed;
 
-//            Vector2 steer = sum - velocity;
-//            steer = Vector2.ClampMagnitude(steer, maxForce);
+//            Vector3 steer = sum - velocity;
+//            steer = Vector3.ClampMagnitude(steer, maxForce);
 
 
 //            return steer;
 //        }
-//        return Vector2.zero;
+//        return Vector3.zero;
 //    }
 
-//    public void ApplyForce(Vector2 force)
+//    public void ApplyForce(Vector3 force)
 //    {
 //        rb.AddForce(force);
 //    }
@@ -998,19 +847,19 @@ class BoidChild
 //    {
 //        if (location.x > maxPos.x)
 //        {
-//            location = new Vector2(minPos.x, location.y);
+//            location = new Vector3(minPos.x, location.y);
 //        }
 //        else if (location.x < minPos.x)
 //        {
-//            location = new Vector2(maxPos.x, location.y);
+//            location = new Vector3(maxPos.x, location.y);
 //        }
 //        if (location.y > maxPos.y)
 //        {
-//            location = new Vector2(location.x, minPos.y);
+//            location = new Vector3(location.x, minPos.y);
 //        }
 //        else if (location.y < minPos.y)
 //        {
-//            location = new Vector2(location.x, maxPos.y);
+//            location = new Vector3(location.x, maxPos.y);
 //        }
 //    }
 
@@ -1019,7 +868,7 @@ class BoidChild
 //        /* We want our boids to face the same direction
 //         * that they're going. To do that, we take our location
 //         * and velocity to see where we're heading. */
-//        Vector2 futureLocation = location + velocity;
+//        Vector3 futureLocation = location + velocity;
 //        myVehicle.transform.LookAt(futureLocation); // We can use the built in 'LookAt' function to automatically face us the right direction
 
 //        /* In the case our model is facing the wrong direction,
@@ -1032,26 +881,26 @@ class BoidChild
 //class BoidChild
 //{
 //    // To make it easier on ourselves, we use Get and Set as quick ways to get the location of the vehicle
-//    public Vector2 location
+//    public Vector3 location
 //    {
 //        get { return myVehicle.transform.position; }
 //        set { myVehicle.transform.position = value; }
 //    }
-//    public Vector2 velocity
+//    public Vector3 velocity
 //    {
 //        get { return rb.velocity; }
 //        set { rb.velocity = value; }
 //    }
 
 //    private float maxSpeed, maxForce;
-//    private Vector2 minPos, maxPos;
+//    private Vector3 minPos, maxPos;
 //    public GameObject myVehicle;
 //    private Rigidbody rb;
 
-//    public BoidChild(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce, Mesh coneMesh)
+//    public BoidChild(Vector3 initPos, Vector3 _minPos, Vector3 _maxPos, float _maxSpeed, float _maxForce, Mesh coneMesh)
 //    {
-//        minPos = _minPos - Vector2.one;
-//        maxPos = _maxPos + Vector2.one;
+//        minPos = _minPos - Vector3.one;
+//        maxPos = _maxPos + Vector3.one;
 //        maxSpeed = _maxSpeed;
 //        maxForce = _maxForce;
 
@@ -1061,7 +910,7 @@ class BoidChild
 //        renderer.material.color = Color.red;
 //        GameObject.Destroy(myVehicle.GetComponent<BoxCollider>());
 
-//        myVehicle.transform.position = new Vector2(initPos.x, initPos.y);
+//        myVehicle.transform.position = new Vector3(initPos.x, initPos.y);
 
 //        myVehicle.AddComponent<Rigidbody>();
 //        rb = myVehicle.GetComponent<Rigidbody>();
@@ -1087,19 +936,19 @@ class BoidChild
 //    {
 //        if (location.x > maxPos.x)
 //        {
-//            location = new Vector2(minPos.x, location.y);
+//            location = new Vector3(minPos.x, location.y);
 //        }
 //        else if (location.x < minPos.x)
 //        {
-//            location = new Vector2(maxPos.x, location.y);
+//            location = new Vector3(maxPos.x, location.y);
 //        }
 //        if (location.y > maxPos.y)
 //        {
-//            location = new Vector2(location.x, minPos.y);
+//            location = new Vector3(location.x, minPos.y);
 //        }
 //        else if (location.y < minPos.y)
 //        {
-//            location = new Vector2(location.x, maxPos.y);
+//            location = new Vector3(location.x, maxPos.y);
 //        }
 //    }
 
@@ -1108,7 +957,7 @@ class BoidChild
 //        /* We want our boids to face the same direction
 //         * that they're going. To do that, we take our location
 //         * and velocity to see where we're heading. */
-//        Vector2 futureLocation = location + velocity;
+//        Vector3 futureLocation = location + velocity;
 //        myVehicle.transform.LookAt(futureLocation); // We can use the built in 'LookAt' function to automatically face us the right direction
 
 //        /* In the case our model is facing the wrong direction,
@@ -1119,9 +968,9 @@ class BoidChild
 
 //    public void Flock(List<BoidChild> boids, float sepM, float aliM, float cohM)
 //    {
-//        Vector2 sep = Separate(boids); // The three flocking rules
-//        Vector2 ali = Align(boids);
-//        Vector2 coh = Cohesion(boids);
+//        Vector3 sep = Separate(boids); // The three flocking rules
+//        Vector3 ali = Align(boids);
+//        Vector3 coh = Cohesion(boids);
 
 //        sep *= sepM; // Arbitrary weights for these forces (Try different ones!)
 //        ali *= aliM;
@@ -1135,19 +984,19 @@ class BoidChild
 //        lookForward(); // Make the boids face forward.
 //    }
 
-//    public Vector2 Align(List<BoidChild> boids)
+//    public Vector3 Align(List<BoidChild> boids)
 //    {
 //        float neighborDist = 30f; // This is an arbitrary value and could vary from boid to boid.
 
 //        /* Add up all the velocities and divide by the total to
 //         * calculate the average velocity. */
-//        Vector2 sum = Vector2.zero;
+//        Vector3 sum = Vector3.zero;
 //        int count = 0;
 //        foreach (BoidChild other in boids)
 //        {
 //            if (other != this)
 //            {
-//                float d = Vector2.Distance(location, other.location);
+//                float d = Vector3.Distance(location, other.location);
 //                if ((d > 0) && (d < neighborDist))
 //                {
 //                    sum += other.velocity;
@@ -1162,26 +1011,26 @@ class BoidChild
 
 //            sum = sum.normalized * maxSpeed; // We desite to go in that direction at maximum speed.
 
-//            Vector2 steer = sum - velocity; // Reynolds's steering force formula.
-//            steer = Vector2.ClampMagnitude(steer, maxForce);
+//            Vector3 steer = sum - velocity; // Reynolds's steering force formula.
+//            steer = Vector3.ClampMagnitude(steer, maxForce);
 //            return steer;
 //        }
 //        else
 //        {
-//            return Vector2.zero; // If we don't find any close boids, the steering force is Zero.
+//            return Vector3.zero; // If we don't find any close boids, the steering force is Zero.
 //        }
 //    }
 
-//    public Vector2 Cohesion(List<BoidChild> boids)
+//    public Vector3 Cohesion(List<BoidChild> boids)
 //    {
 //        float neighborDist = 30f;
-//        Vector2 sum = Vector2.zero;
+//        Vector3 sum = Vector3.zero;
 //        int count = 0;
 //        foreach (BoidChild other in boids)
 //        {
 //            if (other != this)
 //            {
-//                float d = Vector2.Distance(location, other.location);
+//                float d = Vector3.Distance(location, other.location);
 //                if ((d > 0) && (d < neighborDist))
 //                {
 //                    sum += other.location; // Adding up all the other's locations
@@ -1199,24 +1048,24 @@ class BoidChild
 //        }
 //        else
 //        {
-//            return Vector2.zero;
+//            return Vector3.zero;
 //        }
 //    }
 
-//    public Vector2 Seek(Vector2 target)
+//    public Vector3 Seek(Vector3 target)
 //    {
-//        Vector2 desired = target - location;
+//        Vector3 desired = target - location;
 //        desired.Normalize();
 //        desired *= maxSpeed;
-//        Vector2 steer = desired - velocity;
-//        steer = Vector2.ClampMagnitude(steer, maxForce);
+//        Vector3 steer = desired - velocity;
+//        steer = Vector3.ClampMagnitude(steer, maxForce);
 
 //        return steer;
 //    }
 
-//    public Vector2 Separate(List<BoidChild> boids)
+//    public Vector3 Separate(List<BoidChild> boids)
 //    {
-//        Vector2 sum = Vector2.zero;
+//        Vector3 sum = Vector3.zero;
 //        int count = 0;
 
 //        float desiredSeperation = myVehicle.transform.localScale.x * 2;
@@ -1225,11 +1074,11 @@ class BoidChild
 //        {
 //            if (other != this)
 //            {
-//                float d = Vector2.Distance(other.location, location);
+//                float d = Vector3.Distance(other.location, location);
 
 //                if ((d > 0) && (d < desiredSeperation))
 //                {
-//                    Vector2 diff = location - other.location;
+//                    Vector3 diff = location - other.location;
 //                    diff.Normalize();
 
 //                    diff /= d;
@@ -1246,16 +1095,16 @@ class BoidChild
 
 //            sum *= maxSpeed;
 
-//            Vector2 steer = sum - velocity;
-//            steer = Vector2.ClampMagnitude(steer, maxForce);
+//            Vector3 steer = sum - velocity;
+//            steer = Vector3.ClampMagnitude(steer, maxForce);
 
 
 //            return steer;
 //        }
-//        return Vector2.zero;
+//        return Vector3.zero;
 //    }
 
-//    public void ApplyForce(Vector2 force)
+//    public void ApplyForce(Vector3 force)
 //    {
 //        rb.AddForce(force);
 //    }

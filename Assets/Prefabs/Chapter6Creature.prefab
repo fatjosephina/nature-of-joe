@@ -46,15 +46,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af304ba4a72d8014a816bffefd7c7e30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 2
-  maxForce: 1.5
-  sep: 0.1
-  coh: 0.1
-  ali: 0.1
+  sep: 5
+  coh: 5
+  ali: 5
   meshes:
   - {fileID: -2432090755550338912, guid: ddfc14ec5b1b9444395c732f431b1d3f, type: 3}
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   - {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  myVehicle: {fileID: 0}
 --- !u!1 &656149442490432902
 GameObject:
   m_ObjectHideFlags: 0

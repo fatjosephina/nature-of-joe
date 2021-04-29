@@ -8,11 +8,31 @@ public class Ecosystem3 : MonoBehaviour
     List<oscillator> oscillators = new List<oscillator>();
     Vector3 oscillatorAvgPosition = Vector3.zero;
 
+    private Vector3 location, velocity, acceleration;
+    private float topSpeed;
+
+    public float minX;
+    public float minY;
+    public float minZ;
+    public float maxX;
+    public float maxY;
+    public float maxZ;
+
     void Start()
     {
-        //sphereBody = new centralBody();
+        location = this.gameObject.transform.position;
+        velocity = Vector3.zero;
+        acceleration = new Vector3(Random.Range(.1f, .5f), Random.Range(.1f, .5f), Random.Range(.1f, .5f));
+        topSpeed = 1f;
+        minX = 0f;
+        maxX = 50f;
 
-        //sphereBody = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        minY = 2f;
+        maxY = 10f;
+
+        minZ = 0f;
+        maxZ = 50f;
+
         Renderer renderer = this.gameObject.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
         renderer.material.color = Color.red;
@@ -47,7 +67,51 @@ public class Ecosystem3 : MonoBehaviour
             oscillatorAvgPosition += o.oGameObject.transform.transform.position;
         }
         oscillatorAvgPosition = new Vector2(oscillatorAvgPosition.x / oscillators.Count, oscillatorAvgPosition.y / oscillators.Count);
-        this.gameObject.transform.position = oscillatorAvgPosition;
+        //this.gameObject.transform.position = oscillatorAvgPosition;
+        PublicMove();
+    }
+
+    public void PublicMove()
+    {
+        location = this.gameObject.transform.position;
+        velocity += acceleration; // Time.deltaTime is the time passed since the last frame.
+
+        velocity = Vector3.ClampMagnitude(velocity, topSpeed);
+
+        location += velocity * Time.deltaTime;
+
+        this.gameObject.transform.position = new Vector3(location.x, location.y, location.z);
+
+        CheckEdges();
+    }
+
+    void CheckEdges()
+    {
+        if (location.x > maxX)
+        {
+            location.x -= maxX - minX;
+        }
+        else if (location.x < minX)
+        {
+            location.x += maxX - minX;
+        }
+        if (location.y > maxY)
+        {
+            location.y -= maxY - minY;
+        }
+        else if (location.y < minY)
+        {
+            location.y += maxY - minY;
+        }
+        if (location.z > maxZ)
+        {
+            location.z -= maxZ - minZ;
+        }
+        else if (location.z < minZ)
+        {
+            location.z += maxZ - minZ;
+        }
+        this.gameObject.transform.position = new Vector3(location.x, location.y, location.z);
     }
 }
 
@@ -71,7 +135,7 @@ public class oscillator
     public Vector2 velocity, angle, amplitude;
 
     // The window limits
-    private Vector2 maximumPos;
+    private Vector3 maximumPos = new Vector3(1, 2, 3);
 
     // Gives the class a GameObject to draw on the screen
     public GameObject oGameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -81,6 +145,7 @@ public class oscillator
 
     public oscillator(Vector3 sphereBodyPosition)
     {
+        oGameObject.transform.position = sphereBodyPosition;
         //findWindowLimits();
         angle = Vector2.zero;
         velocity = new Vector2(Random.Range(-.05f, .05f), Random.Range(-0.05f, 0.05f));
@@ -97,7 +162,7 @@ public class oscillator
         lineRender.material = new Material(Shader.Find("Diffuse"));
         //Begin rendering the line between the two objects. Set the first point (0) at the centerSphere Position
         //Make sure the end of the line (1) appears at the new Vector3
-        Vector2 center = new Vector2(sphereBodyPosition.x, sphereBodyPosition.y);
+        Vector3 center = new Vector3(oGameObject.transform.position.x, oGameObject.transform.position.y, oGameObject.transform.position.z);
         lineRender.SetPosition(0, center);
     }
 

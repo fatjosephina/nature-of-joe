@@ -13,10 +13,9 @@ GameObject:
   - component: {fileID: 7658783244571534236}
   - component: {fileID: 7658783244571534239}
   - component: {fileID: 7658783244571534238}
-  - component: {fileID: 1314328656451490794}
   m_Layer: 0
   m_Name: Chapter2Creature
-  m_TagString: Chapter2Predator
+  m_TagString: Chapter1Predator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,20 +108,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transform: {fileID: 0}
   body: {fileID: 0}
---- !u!114 &1314328656451490794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7658783244571534225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea66cb820cedddd4f8c8134cc066d9aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gravityForce: 6.7
-  mass: 0
-  predator: {fileID: 0}
-  predatorTag: Chapter1Predator
-  isAlive: 1

@@ -593,12 +593,12 @@ MonoBehaviour:
   chapter3Creatures: []
   chapter3Creature: {fileID: 5124640105124228609, guid: 5e1add9f861ca064fb8c63161df96cdc,
     type: 3}
-  chapter3CreaturePopulation: 5
+  chapter3CreaturePopulation: 10
   chapter3MinimumPopulation: 0
   chapter6Creatures: []
   chapter6Creature: {fileID: 656149442428197765, guid: c0ad24d18015d0345a8f30c5f8b5207d,
     type: 3}
-  chapter6CreaturePopulation: 20
+  chapter6CreaturePopulation: 1
   chapter6MinimumPopulation: 0
   chapter7Creatures: []
   chapter7Creature: {fileID: 0}
