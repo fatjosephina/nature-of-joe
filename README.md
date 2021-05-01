@@ -68,3 +68,10 @@ This is a repository that I created to include content from my Nature of Code (U
 * Ecosystem Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Ecosystem7.cs
 * Video: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Videos/Chapter7Video.zip
 </details>
+
+**CHAPTER 8**
+<details>
+  <summary> Click to expand </summary>
+
+* Ecosystem Script: https://github.com/fatjosephina/nature-of-joe/blob/main/Assets/Scripts/Ecosystem8.cs
+</details>
