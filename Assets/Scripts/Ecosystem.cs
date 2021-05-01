@@ -66,6 +66,16 @@ public class Ecosystem : MonoBehaviour
             GameObject chapter6C = Instantiate(chapter6Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
             chapter6Creatures.Add(chapter6C);
         }
+        for (int i = 0; i < chapter7CreaturePopulation; i++)
+        {
+            GameObject chapter7C = Instantiate(chapter7Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            chapter7Creatures.Add(chapter7C);
+        }
+        for (int i = 0; i < chapter8CreaturePopulation; i++)
+        {
+            GameObject chapter8C = Instantiate(chapter8Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            chapter8Creatures.Add(chapter8C);
+        }
     }
 
     // Update is called once per frame
@@ -86,6 +96,14 @@ public class Ecosystem : MonoBehaviour
         if (chapter6Creatures.Count <= chapter6MinimumPopulation)
         {
             StartCoroutine(circleOfLife(chapter6Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows))));
+        }
+        if (chapter7Creatures.Count <= chapter7MinimumPopulation)
+        {
+            StartCoroutine(circleOfLife(chapter7Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows))));
+        }
+        if (chapter6Creatures.Count <= chapter8MinimumPopulation)
+        {
+            StartCoroutine(circleOfLife(chapter8Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows))));
         }
     }
 
@@ -114,6 +132,16 @@ public class Ecosystem : MonoBehaviour
         {
             GameObject c = Instantiate(prey, position, Quaternion.identity);
             chapter6Creatures.Add(c);
+        }
+        if (prey.name == chapter7Creature.name || prey.name == chapter7Creature.name + "(Clone)")
+        {
+            GameObject c = Instantiate(prey, position, Quaternion.identity);
+            chapter7Creatures.Add(c);
+        }
+        if (prey.name == chapter8Creature.name || prey.name == chapter8Creature.name + "(Clone)")
+        {
+            GameObject c = Instantiate(prey, position, Quaternion.identity);
+            chapter8Creatures.Add(c);
         }
     }
 }

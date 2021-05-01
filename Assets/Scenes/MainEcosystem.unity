@@ -601,12 +601,14 @@ MonoBehaviour:
   chapter6CreaturePopulation: 1
   chapter6MinimumPopulation: 0
   chapter7Creatures: []
-  chapter7Creature: {fileID: 0}
-  chapter7CreaturePopulation: 0
+  chapter7Creature: {fileID: 5400383977999651726, guid: cbba118e143bcab42af00ec507bb1e78,
+    type: 3}
+  chapter7CreaturePopulation: 10
   chapter7MinimumPopulation: 0
   chapter8Creatures: []
-  chapter8Creature: {fileID: 0}
-  chapter8CreaturePopulation: 0
+  chapter8Creature: {fileID: 8515691430601983773, guid: 8691a8590150341489075f30879c6926,
+    type: 3}
+  chapter8CreaturePopulation: 5
   chapter8MinimumPopulation: 0
   terrain: {fileID: 1249939724}
   terrainMin: 10
