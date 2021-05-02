@@ -35,13 +35,13 @@ public class Ecosystem7ScriptForMainEcosystem : MonoBehaviour
         // Choosing a random rule set using Random.Range
         rulesChosen = Random.Range(0, rulesetList.Count);
         int[] ruleset = rulesetList[rulesChosen];
-        Debug.Log(rulesChosen);
         ca = new CellularAutomataMoverMain(ruleset); // Initialize CA
 
         limitFrameRate();
         this.gameObject.AddComponent<Rigidbody>();
         rb = this.gameObject.GetComponent<Rigidbody>();
         rb.useGravity = false;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         location = Vector3.zero; // Vector2.zero is a (0, 0) vector
         velocity = Vector3.zero;

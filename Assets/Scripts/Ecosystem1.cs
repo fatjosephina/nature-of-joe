@@ -40,6 +40,7 @@ public class Ecosystem1 : MonoBehaviour
         velocity = Vector3.zero;
         acceleration = new Vector3(-0.1F, 0f, -0.1F);
         topSpeed = 10F;
+        this.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     // Update is called once per frame forever and ever (until you quit).
