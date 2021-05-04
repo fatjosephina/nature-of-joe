@@ -36,7 +36,7 @@ public class Ecosystem6Alt : MonoBehaviour
             float ranXParent = Random.Range(0f, 50f);
             float ranYParent = Random.Range(2f, 10f);
             float ranZParent = Random.Range(0f, 50f);
-            boidParents.Add(new BoidParentAlt(new Vector3(ranXParent, ranYParent, ranZParent), minimumPos, maximumPos, maxSpeed, maxForce, boids));
+            boidParents.Add(new BoidParentAlt(new Vector3(ranXParent, ranYParent, ranZParent), minimumPos, maximumPos, maxSpeed, maxForce, boids, "Chapter7Predator"));
         }
         foreach (BoidParentAlt parent in boidParents)
         {
@@ -77,7 +77,7 @@ class BoidParentAlt
         set { rb.velocity = value; }
     }
 
-    public BoidParentAlt(Vector3 initPos, Vector3 _minPos, Vector3 _maxPos, float _maxSpeed, float _maxForce, List<BoidChildAlt> boids)
+    public BoidParentAlt(Vector3 initPos, Vector3 _minPos, Vector3 _maxPos, float _maxSpeed, float _maxForce, List<BoidChildAlt> boids, string tag)
     {
         minPos = _minPos - Vector3.one;
         maxPos = _maxPos + Vector3.one;
@@ -95,6 +95,8 @@ class BoidParentAlt
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         rb.useGravity = false; // Remember to ignore gravity!
         rb.mass = 100f;
+
+        myVehicle.gameObject.tag = tag;
 
         foreach (BoidChildAlt boid in boidColony)
         {

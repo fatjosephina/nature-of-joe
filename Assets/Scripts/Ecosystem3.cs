@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Ecosystem3 : MonoBehaviour
 {
-    GameObject sphereBody;
     List<oscillator> oscillators = new List<oscillator>();
     Vector3 oscillatorAvgPosition = Vector3.zero;
 
@@ -23,7 +22,7 @@ public class Ecosystem3 : MonoBehaviour
         location = this.gameObject.transform.position;
         velocity = Vector3.zero;
         acceleration = new Vector3(Random.Range(.1f, .5f), Random.Range(.1f, .5f), Random.Range(.1f, .5f));
-        topSpeed = 1f;
+        topSpeed = 0.5f;
         minX = 0f;
         maxX = 50f;
 

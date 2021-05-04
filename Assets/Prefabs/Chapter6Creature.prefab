@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4847443207784077057}
   m_Layer: 0
   m_Name: Chapter6Creature
-  m_TagString: Chapter6Predator
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

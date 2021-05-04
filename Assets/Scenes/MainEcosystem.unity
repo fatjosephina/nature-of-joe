@@ -232,9 +232,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravityForce: 6.7
   mass: 20
-  predator: {fileID: 5505425990375189187, guid: 81a5c716821bb5943ab5bd25e754f3d7,
+  predator: {fileID: 7658783244571534225, guid: abb34a25249514f4284bd9c166346490,
     type: 3}
-  predatorTag: Chapter1Predator
+  predatorTag: FoodPredator
   isAlive: 1
 --- !u!135 &249452646
 SphereCollider:
@@ -344,9 +344,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravityForce: 6.7
   mass: 20
-  predator: {fileID: 5505425990375189187, guid: 81a5c716821bb5943ab5bd25e754f3d7,
+  predator: {fileID: 7658783244571534225, guid: abb34a25249514f4284bd9c166346490,
     type: 3}
-  predatorTag: Chapter1Predator
+  predatorTag: FoodPredator
   isAlive: 1
 --- !u!135 &583899937
 SphereCollider:
@@ -649,9 +649,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravityForce: 6.7
   mass: 20
-  predator: {fileID: 5505425990375189187, guid: 81a5c716821bb5943ab5bd25e754f3d7,
+  predator: {fileID: 7658783244571534225, guid: abb34a25249514f4284bd9c166346490,
     type: 3}
-  predatorTag: Chapter1Predator
+  predatorTag: FoodPredator
   isAlive: 1
 --- !u!135 &2009231304
 SphereCollider:

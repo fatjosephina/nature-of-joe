@@ -9,6 +9,9 @@ TagManager:
   - Chapter2Predator
   - Chapter3Predator
   - Chapter6Predator
+  - Chapter7Predator
+  - FoodPredator
+  - WaterPredator
   layers:
   - Default
   - TransparentFX

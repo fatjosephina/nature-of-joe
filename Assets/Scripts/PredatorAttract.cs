@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PredatorAttract : MonoBehaviour
 {
-    public float gravityForce = 6.7f;
+    public float gravityForce = 2f;
     public float mass;
     Vector3 location;
-    public GameObject predator;
     public string predatorTag = "";
     public bool isAlive = true;
 
@@ -31,38 +30,40 @@ public class PredatorAttract : MonoBehaviour
                 foreach (GameObject predator in predators)
                 {
                     location = this.gameObject.transform.position;
-                    predator.transform.GetComponent<Rigidbody>().AddForce(predator.transform.forward, ForceMode.Acceleration);
-                    predator.transform.GetComponent<Rigidbody>().AddForce(Attract(predator), ForceMode.Acceleration);
-
                     float dist = Vector3.Distance(predator.transform.position, location);
-                    if (dist <= 4f)
+                    if (dist < 4f)
                     {
-                        isAlive = false;
-                        if (predatorTag == "Chapter1Predator")
+                        predator.transform.GetComponent<Rigidbody>().AddForce(predator.transform.forward, ForceMode.Acceleration);
+                        predator.transform.GetComponent<Rigidbody>().AddForce(Attract(predator), ForceMode.Acceleration);
+                        if (dist <= 1f)
                         {
-                            ecosystem.chapter1Creatures.Remove(this.gameObject);
+                            isAlive = false;
+                            if (predatorTag == "Chapter1Predator")
+                            {
+                                ecosystem.chapter1Creatures.Remove(this.gameObject);
+                            }
+                            else if (predatorTag == "Chapter2Predator")
+                            {
+                                ecosystem.chapter2Creatures.Remove(this.gameObject);
+                            }
+                            else if (predatorTag == "Chapter3Predator")
+                            {
+                                ecosystem.chapter3Creatures.Remove(this.gameObject);
+                            }
+                            else if (predatorTag == "Chapter6Predator")
+                            {
+                                ecosystem.chapter6Creatures.Remove(this.gameObject);
+                            }
+                            else if (predatorTag == "Chapter7Predator")
+                            {
+                                ecosystem.chapter7Creatures.Remove(this.gameObject);
+                            }
+                            else if (predatorTag == "Chapter8Predator")
+                            {
+                                ecosystem.chapter8Creatures.Remove(this.gameObject);
+                            }
+                            Destroy(gameObject);
                         }
-                        else if (predatorTag == "Chapter2Predator")
-                        {
-                            ecosystem.chapter2Creatures.Remove(this.gameObject);
-                        }
-                        else if (predatorTag == "Chapter3Predator")
-                        {
-                            ecosystem.chapter3Creatures.Remove(this.gameObject);
-                        }
-                        else if (predatorTag == "Chapter6Predator")
-                        {
-                            ecosystem.chapter6Creatures.Remove(this.gameObject);
-                        }
-                        else if (predatorTag == "Chapter7Predator")
-                        {
-                            ecosystem.chapter7Creatures.Remove(this.gameObject);
-                        }
-                        else if (predatorTag == "Chapter8Predator")
-                        {
-                            ecosystem.chapter8Creatures.Remove(this.gameObject);
-                        }
-                        Destroy(gameObject);
                     }
                 }
             }
@@ -76,7 +77,6 @@ public class PredatorAttract : MonoBehaviour
         Vector3 gravityDirection = difference.normalized;
         float gravity = gravityForce * (mass * predator.GetComponent<Rigidbody>().mass) / (dist * dist);
         Vector3 gravityVector = gravityDirection * gravity;
-
         return gravityVector;
     }
 }

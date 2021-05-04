@@ -13,9 +13,11 @@ GameObject:
   - component: {fileID: 7658783244571534236}
   - component: {fileID: 7658783244571534239}
   - component: {fileID: 7658783244571534238}
+  - component: {fileID: 6506349759978953467}
+  - component: {fileID: 3533373827008819599}
   m_Layer: 0
   m_Name: Chapter2Creature
-  m_TagString: Chapter1Predator
+  m_TagString: FoodPredator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,3 +110,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transform: {fileID: 0}
   body: {fileID: 0}
+--- !u!114 &6506349759978953467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7658783244571534225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea66cb820cedddd4f8c8134cc066d9aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravityForce: 2
+  mass: 0
+  predatorTag: Chapter2Predator
+  isAlive: 1
+--- !u!114 &3533373827008819599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7658783244571534225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0341e021c22977b45a436b6a2a4bd6c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  predatorTag: FoodPredator
+  chapter1Creature: {fileID: 5505425990375189187, guid: 81a5c716821bb5943ab5bd25e754f3d7,
+    type: 3}
+  chapter2Creature: {fileID: 7658783244571534225}
+  chapter7Creature: {fileID: 5400383977999651726, guid: cbba118e143bcab42af00ec507bb1e78,
+    type: 3}
