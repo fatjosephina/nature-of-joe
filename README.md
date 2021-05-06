@@ -1,5 +1,11 @@
 # nature-of-joe
-This is a repository that I created to include content from my Nature of Code (Unity Remix) applications. Look below for the exercises per chapter.  
+This is a repository that I created to include content from my Nature of Code (Unity Remix) applications.
+# FINAL ECOSYSTEM - THE VIRTUAL AQUARIUM
+![VirtualAquariumScreenshot](https://user-images.githubusercontent.com/55261891/117374745-5423f400-ae93-11eb-9382-df1ba8caff0f.png)
+* All Scripts: https://github.com/fatjosephina/nature-of-joe/tree/main/Assets/Scripts
+* itch.io Page: https://fatjosephina.itch.io/virtual-aquarium
+# EXERCISES PER CHAPTER
+Look below for the exercises per chapter.  
 **INTRODUCTION**  
 <details>
   <summary> Click to expand </summary>
