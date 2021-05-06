@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PredatorAttract : MonoBehaviour
 {
-    public float gravityForce = 2f;
+    public float gravityForce = 3f;
     public float mass;
     Vector3 location;
     public string predatorTag = "";
@@ -61,6 +61,10 @@ public class PredatorAttract : MonoBehaviour
                             else if (predatorTag == "Chapter8Predator")
                             {
                                 ecosystem.chapter8Creatures.Remove(this.gameObject);
+                            }
+                            else if (predatorTag == "FoodPredator")
+                            {
+                                ecosystem.foods.Remove(this.gameObject);
                             }
                             Destroy(gameObject);
                         }

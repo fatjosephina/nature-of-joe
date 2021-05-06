@@ -10,6 +10,7 @@ public class Reproduce : MonoBehaviour
     public GameObject chapter1Creature;
     public GameObject chapter2Creature;
     public GameObject chapter7Creature;
+    public int maxReproduceable = 15;
 
     private void Start()
     {
@@ -30,8 +31,7 @@ public class Reproduce : MonoBehaviour
                     float dist = Vector3.Distance(predator.transform.position, location);
                     if (dist <= 1f)
                     {
-                        Debug.Log(predators.Length);
-                        if (predators.Length < 15)
+                        if (predators.Length < maxReproduceable)
                         {
                             if (predatorTag == "Chapter2Predator")
                             {

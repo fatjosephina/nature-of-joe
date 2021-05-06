@@ -29,8 +29,8 @@ public class Ecosystem1 : MonoBehaviour
         minX = 0f;
         maxX = 50f;
 
-        minY = 2f;
-        maxY = 10f;
+        minY = 5f;
+        maxY = 14f;
 
         minZ = 0f;
         maxZ= 50f;

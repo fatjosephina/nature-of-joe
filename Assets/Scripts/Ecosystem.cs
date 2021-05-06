@@ -39,27 +39,36 @@ public class Ecosystem : MonoBehaviour
     public float terrainMin;
 
     //Animal food
-    public GameObject flower;
-    public int flowerTotal;
-    public int flowerMin;
+    public List<GameObject> foods = new List<GameObject>();
+    public GameObject food;
+    public int foodTotal;
+    public int foodMin;
 
     // Start is called before the first frame update
     void Start()
     {
         for (int i = 0; i < chapter1CreaturePopulation; i++)
         {
-            GameObject chapter1C = Instantiate(chapter1Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            GameObject chapter1C = Instantiate(chapter1Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(5f, 14f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
             chapter1Creatures.Add(chapter1C);
         }
         for (int i = 0; i < chapter2CreaturePopulation; i++)
         {
-            GameObject chapter2C = Instantiate(chapter2Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            GameObject chapter2C = Instantiate(chapter2Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(8f, 14f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
             chapter2Creatures.Add(chapter2C);
         }
         for (int i = 0; i < chapter3CreaturePopulation; i++)
         {
-            GameObject chapter3C = Instantiate(chapter3Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            GameObject chapter3C = Instantiate(chapter3Creature, new Vector3(Random.Range(terrainMin, terrain.cols), 6f, Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
             chapter3Creatures.Add(chapter3C);
+            RaycastHit hit;
+            Physics.Raycast(chapter3C.transform.position + new Vector3(0f, 10f, 0f), Vector3.down, out hit);
+            while (hit.collider == null)
+            {
+                chapter3C.transform.position = new Vector3(Random.Range(terrainMin, terrain.cols), 6f, Random.Range(terrainMin, terrain.rows));
+                Physics.Raycast(chapter3C.transform.position + new Vector3(0f, 10f, 0f), Vector3.down, out hit);
+            }
+            chapter3C.transform.position = new Vector3(chapter3C.transform.position.x, hit.collider.gameObject.transform.position.y + 2f, chapter3C.transform.position.z);
         }
         for (int i = 0; i < chapter6CreaturePopulation; i++)
         {
@@ -83,7 +92,11 @@ public class Ecosystem : MonoBehaviour
                 Physics.Raycast(chapter8C.transform.position + new Vector3(0f, 10f, 0f), Vector3.down, out hit);
             }
             chapter8C.transform.position = new Vector3(chapter8C.transform.position.x, hit.collider.gameObject.transform.position.y - 4.5f, chapter8C.transform.position.z);
-
+        }
+        for (int i = 0; i < foodTotal; i++)
+        {
+           GameObject fishFood = Instantiate(food, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(8f, 14f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+           foods.Add(fishFood);
         }
     }
 
@@ -92,18 +105,26 @@ public class Ecosystem : MonoBehaviour
     {
         if (chapter1Creatures.Count <= chapter1MinimumPopulation)
         {
-            GameObject c = Instantiate(chapter1Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            GameObject c = Instantiate(chapter1Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(5f, 14f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
             chapter1Creatures.Add(c);
         }
         if (chapter2Creatures.Count <= chapter2MinimumPopulation)
         {
-            GameObject c = Instantiate(chapter2Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            GameObject c = Instantiate(chapter2Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(8f, 14f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
             chapter2Creatures.Add(c);
         }
         if (chapter3Creatures.Count <= chapter3MinimumPopulation)
         {
-            GameObject c = Instantiate(chapter3Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
-            chapter3Creatures.Add(c);
+            GameObject chapter3C = Instantiate(chapter3Creature, new Vector3(Random.Range(terrainMin, terrain.cols), 6f, Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            chapter3Creatures.Add(chapter3C);
+            RaycastHit hit;
+            Physics.Raycast(chapter3C.transform.position + new Vector3(0f, 10f, 0f), Vector3.down, out hit);
+            while (hit.collider == null)
+            {
+                chapter3C.transform.position = new Vector3(Random.Range(terrainMin, terrain.cols), 6f, Random.Range(terrainMin, terrain.rows));
+                Physics.Raycast(chapter3C.transform.position + new Vector3(0f, 10f, 0f), Vector3.down, out hit);
+            }
+            chapter3C.transform.position = new Vector3(chapter3C.transform.position.x, hit.collider.gameObject.transform.position.y + 2f, chapter3C.transform.position.z);
         }
         if (chapter6Creatures.Count <= chapter6MinimumPopulation)
         {
@@ -117,8 +138,24 @@ public class Ecosystem : MonoBehaviour
         }
         if (chapter8Creatures.Count <= chapter8MinimumPopulation)
         {
-            GameObject c = Instantiate(chapter8Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
-            chapter8Creatures.Add(c);
+            GameObject chapter8C = Instantiate(chapter8Creature, new Vector3(Random.Range(terrainMin, terrain.cols), 6f, Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            chapter8Creatures.Add(chapter8C);
+            RaycastHit hit;
+            Physics.Raycast(chapter8C.transform.position + new Vector3(0f, 10f, 0f), Vector3.down, out hit);
+            while (hit.collider == null)
+            {
+                chapter8C.transform.position = new Vector3(Random.Range(terrainMin, terrain.cols), 6f, Random.Range(terrainMin, terrain.rows));
+                Physics.Raycast(chapter8C.transform.position + new Vector3(0f, 10f, 0f), Vector3.down, out hit);
+            }
+            chapter8C.transform.position = new Vector3(chapter8C.transform.position.x, hit.collider.gameObject.transform.position.y - 4.5f, chapter8C.transform.position.z);
+        }
+        if (foods.Count <= foodMin)
+        {
+            for (int i = 0; i < foodTotal; i++)
+            {
+                GameObject f = Instantiate(food, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(8f, 14f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+                foods.Add(f);
+            }
         }
     }
 

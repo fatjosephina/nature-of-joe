@@ -64,7 +64,6 @@ public class Ecosystem8 : MonoBehaviour
             Size = len,
             Angle = 0
         };
-        Debug.Log(len);
 
         string sentence = lSys.Sentence;
         for (int i = 0; i < sentence.Length; i++)

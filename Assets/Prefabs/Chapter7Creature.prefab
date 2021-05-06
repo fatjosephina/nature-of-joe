@@ -607,7 +607,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravityForce: 2
-  mass: 0
+  mass: 0.25
   predatorTag: Chapter7Predator
   isAlive: 1
 --- !u!114 &8976776584881623760

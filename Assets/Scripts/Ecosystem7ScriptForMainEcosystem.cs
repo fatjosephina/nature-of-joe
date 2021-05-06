@@ -79,7 +79,6 @@ public class Ecosystem7ScriptForMainEcosystem : MonoBehaviour
 
     IEnumerator TimeManager()
     {
-        Debug.Log("Changing");
         yield return new WaitForSeconds(2f);
         StartCoroutine(ChangePath());
     }

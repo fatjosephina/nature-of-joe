@@ -21,13 +21,13 @@ public class Ecosystem3 : MonoBehaviour
     {
         location = this.gameObject.transform.position;
         velocity = Vector3.zero;
-        acceleration = new Vector3(Random.Range(.1f, .5f), Random.Range(.1f, .5f), Random.Range(.1f, .5f));
-        topSpeed = 0.5f;
+        acceleration = new Vector3(Random.Range(-.5f, .5f), Random.Range(-.1f, .1f), Random.Range(-.5f, .5f));
+        topSpeed = 1f;
         minX = 0f;
         maxX = 50f;
 
         minY = 2f;
-        maxY = 10f;
+        maxY = 14f;
 
         minZ = 0f;
         maxZ = 50f;
@@ -148,28 +148,22 @@ public class oscillator
         //findWindowLimits();
         angle = Vector2.zero;
         velocity = new Vector2(Random.Range(-.05f, .05f), Random.Range(-0.05f, 0.05f));
-        amplitude = new Vector2(Random.Range(-maximumPos.x / 3, maximumPos.x / 3), Random.Range(-maximumPos.y / 3, maximumPos.y / 3));
+        amplitude = new Vector2(Random.Range(-maximumPos.x / 2, maximumPos.x / 2), Random.Range(-maximumPos.y / 3, maximumPos.y / 3));
 
         //We need to create a new material for WebGL
         Renderer r = oGameObject.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
+        r.material.color = Color.red;
 
         // Create a GameObject that will be the line
         GameObject lineDrawing = new GameObject();
         //Add the Unity Component "LineRenderer" to the GameObject lineDrawing.
         lineRender = lineDrawing.AddComponent<LineRenderer>();
         lineRender.material = new Material(Shader.Find("Diffuse"));
+        lineRender.material.color = Color.red;
         //Begin rendering the line between the two objects. Set the first point (0) at the centerSphere Position
         //Make sure the end of the line (1) appears at the new Vector3
         Vector3 center = new Vector3(oGameObject.transform.position.x, oGameObject.transform.position.y, oGameObject.transform.position.z);
         lineRender.SetPosition(0, center);
-    }
-
-    private void findWindowLimits()
-    {
-        // We want to start by setting the camera's projection to Orthographic mode
-        Camera.main.orthographic = true;
-        // Next we grab the minimum and maximum position for the screen
-        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }

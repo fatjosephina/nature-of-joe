@@ -126,9 +126,6 @@ class BoidParentAlt
         ApplyForce(sep); // Applying all the forces
         ApplyForce(ali);
         ApplyForce(coh);
-
-        checkBounds(); // To loop the world to the other side of the screen.
-        //lookForward(); // Make the boids face forward.
     }
 
     public Vector3 Align(List<BoidParentAlt> boids)
@@ -254,48 +251,6 @@ class BoidParentAlt
     public void ApplyForce(Vector3 force)
     {
         rb.AddForce(force);
-    }
-
-    private void checkBounds()
-    {
-        if (location.x > maxPos.x)
-        {
-            location = new Vector3(minPos.x, location.y, location.z);
-        }
-        else if (location.x < minPos.x)
-        {
-            location = new Vector3(maxPos.x, location.y, location.z);
-        }
-        if (location.y > maxPos.y)
-        {
-            location = new Vector3(location.x, minPos.y, location.z);
-        }
-        else if (location.y < minPos.y)
-        {
-            location = new Vector3(location.x, maxPos.y, location.z);
-        }
-        if (location.z > maxPos.z)
-        {
-            location = new Vector3(location.x, location.y, minPos.z);
-        }
-        else if (location.z < minPos.z)
-        {
-            location = new Vector3(location.x, location.y, maxPos.z);
-        }
-    }
-
-    private void lookForward()
-    {
-        /* We want our boids to face the same direction
-         * that they're going. To do that, we take our location
-         * and velocity to see where we're heading. */
-        Vector3 futureLocation = location + velocity;
-        myVehicle.transform.LookAt(futureLocation); // We can use the built in 'LookAt' function to automatically face us the right direction
-
-        /* In the case our model is facing the wrong direction,
-         * we can adjust it using Eular Angles. */
-        Vector3 eular = myVehicle.transform.rotation.eulerAngles;
-        myVehicle.transform.rotation = Quaternion.Euler(eular.x + 90, eular.y + 0, eular.z + 0); // Adjust these numbers to make the boids face different directions!
     }
 }
 
