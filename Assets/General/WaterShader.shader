@@ -91,7 +91,7 @@
 				col += (step(0.4 * distortx,foamLine) * _FoamC); // add the foam line and tint to the texture
 				col = saturate(col) * col.a ;
  				
-				ripples = step(0.99, ripples * 3);
+				ripples = step(0.99, ripples * 1.25);
 				return   col + ripples;
 			}
 			ENDCG

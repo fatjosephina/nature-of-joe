@@ -70,10 +70,12 @@ MonoBehaviour:
   coh: 0.1
   ali: 0.1
   meshes:
-  - {fileID: -2432090755550338912, guid: ddfc14ec5b1b9444395c732f431b1d3f, type: 3}
-  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   - {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  RippleCam: {fileID: 8503066202713595531, guid: e0a312ebc004a3b4ea26d10afece87ed,
-    type: 3}
+  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  colors:
+  - {r: 0.6816211, g: 0.6556604, b: 1, a: 0}
+  - {r: 0.5856969, g: 0.09344961, b: 0.7924528, a: 0}
+  - {r: 0.3972944, g: 0.9056604, b: 0.70128894, a: 0}
   RippleParticles: {fileID: 637647892335855505, guid: 24e736dc3c644a44cb44b7be79012c19,
     type: 3}

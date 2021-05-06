@@ -11,6 +11,7 @@ public class Ecosystem6Alt : MonoBehaviour
     public Mesh cubeMesh;
     public Mesh sphereMesh;*/
     public Mesh[] meshes = new Mesh[3];
+    public Color[] colors = new Color[3];
 
     private List<BoidChildAlt> boids; // Declare a List of Vehicle objects.
     private Vector3 minimumPos = new Vector3(0f, 15f, 0f), maximumPos = new Vector3(50f, 15f, 50f);
@@ -33,7 +34,8 @@ public class Ecosystem6Alt : MonoBehaviour
                 float ranY = 15f;
                 float ranZ = Random.Range(0f, 50f);
                 Mesh mesh = meshes[i];
-                boids.Add(new BoidChildAlt(new Vector3(ranX, ranY, ranZ), minimumPos, maximumPos, maxSpeed, maxForce, mesh, RippleParticles));
+                Color color = colors[i];
+                boids.Add(new BoidChildAlt(new Vector3(ranX, ranY, ranZ), minimumPos, maximumPos, maxSpeed, maxForce, i, mesh, color, RippleParticles));
             }
             float ranXParent = Random.Range(0f, 50f);
             float ranYParent = 15f;
@@ -316,17 +318,17 @@ class BoidChildAlt
     public GameObject myVehicle;
     private Rigidbody rb;
 
-    public BoidChildAlt(Vector3 initPos, Vector3 _minPos, Vector3 _maxPos, float _maxSpeed, float _maxForce, Mesh coneMesh, GameObject ripParticles)
+    public BoidChildAlt(Vector3 initPos, Vector3 _minPos, Vector3 _maxPos, float _maxSpeed, float _maxForce, int childType, Mesh coneMesh, Color color, GameObject ripParticles)
     {
-        minPos = _minPos - Vector3.one;
-        maxPos = _maxPos + Vector3.one;
+        minPos = _minPos /*- Vector3.one*/;
+        maxPos = _maxPos /*+ Vector3.one*/;
         maxSpeed = _maxSpeed;
         maxForce = _maxForce;
 
         myVehicle = GameObject.CreatePrimitive(PrimitiveType.Cube);
         Renderer renderer = myVehicle.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
-        renderer.material.color = Color.red;
+        renderer.material.color = color;
         GameObject.Destroy(myVehicle.GetComponent<BoxCollider>());
 
         myVehicle.transform.position = new Vector3(initPos.x, initPos.y, initPos.z);
@@ -347,6 +349,20 @@ class BoidChildAlt
         {
             MeshFilter filter = myVehicle.GetComponent<MeshFilter>();
             filter.mesh = coneMesh;
+            if (childType == 0)
+            {
+                myVehicle.transform.localScale = new Vector3(1f, 3f, 2f);
+            }
+            else if (childType == 1)
+            {
+                myVehicle.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+            }
+            else if (childType == 2)
+            {
+                myVehicle.transform.localScale = new Vector3(0.5f, 0.5f, 2f);
+                maxPos = maxPos - new Vector3(0, 0.8f, 0f);
+                minPos = minPos - new Vector3(0f, 0.8f, 0f);
+            }
         }
         else
         {

@@ -73,8 +73,17 @@ public class Ecosystem : MonoBehaviour
         }
         for (int i = 0; i < chapter8CreaturePopulation; i++)
         {
-            GameObject chapter8C = Instantiate(chapter8Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            GameObject chapter8C = Instantiate(chapter8Creature, new Vector3(Random.Range(terrainMin, terrain.cols), 6f, Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
             chapter8Creatures.Add(chapter8C);
+            RaycastHit hit;
+            Physics.Raycast(chapter8C.transform.position + new Vector3(0f, 10f, 0f), Vector3.down, out hit);
+            while (hit.collider == null)
+            {
+                chapter8C.transform.position = new Vector3(Random.Range(terrainMin, terrain.cols), 6f, Random.Range(terrainMin, terrain.rows));
+                Physics.Raycast(chapter8C.transform.position + new Vector3(0f, 10f, 0f), Vector3.down, out hit);
+            }
+            chapter8C.transform.position = new Vector3(chapter8C.transform.position.x, hit.collider.gameObject.transform.position.y - 4.5f, chapter8C.transform.position.z);
+
         }
     }
 
