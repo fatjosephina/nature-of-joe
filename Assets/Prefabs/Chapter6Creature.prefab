@@ -73,3 +73,7 @@ MonoBehaviour:
   - {fileID: -2432090755550338912, guid: ddfc14ec5b1b9444395c732f431b1d3f, type: 3}
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   - {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  RippleCam: {fileID: 8503066202713595531, guid: e0a312ebc004a3b4ea26d10afece87ed,
+    type: 3}
+  RippleParticles: {fileID: 637647892335855505, guid: 24e736dc3c644a44cb44b7be79012c19,
+    type: 3}

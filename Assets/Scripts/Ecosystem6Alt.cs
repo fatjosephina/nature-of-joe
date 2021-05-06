@@ -13,8 +13,10 @@ public class Ecosystem6Alt : MonoBehaviour
     public Mesh[] meshes = new Mesh[3];
 
     private List<BoidChildAlt> boids; // Declare a List of Vehicle objects.
-    private Vector3 minimumPos = new Vector3(0f, 2f, 0f), maximumPos = new Vector3(50f, 10f, 50f);
+    private Vector3 minimumPos = new Vector3(0f, 15f, 0f), maximumPos = new Vector3(50f, 15f, 50f);
     private List<BoidParentAlt> boidParents;
+
+    public GameObject RippleParticles;
 
     // Start is called before the first frame update
     void Start()
@@ -28,13 +30,13 @@ public class Ecosystem6Alt : MonoBehaviour
             for (int i = 0; i < 3; i++)
             {
                 float ranX = Random.Range(0f, 50f);
-                float ranY = Random.Range(2f, 10f);
+                float ranY = 15f;
                 float ranZ = Random.Range(0f, 50f);
                 Mesh mesh = meshes[i];
-                boids.Add(new BoidChildAlt(new Vector3(ranX, ranY, ranZ), minimumPos, maximumPos, maxSpeed, maxForce, mesh));
+                boids.Add(new BoidChildAlt(new Vector3(ranX, ranY, ranZ), minimumPos, maximumPos, maxSpeed, maxForce, mesh, RippleParticles));
             }
             float ranXParent = Random.Range(0f, 50f);
-            float ranYParent = Random.Range(2f, 10f);
+            float ranYParent = 15f;
             float ranZParent = Random.Range(0f, 50f);
             boidParents.Add(new BoidParentAlt(new Vector3(ranXParent, ranYParent, ranZParent), minimumPos, maximumPos, maxSpeed, maxForce, boids, "Chapter7Predator"));
         }
@@ -55,6 +57,11 @@ public class Ecosystem6Alt : MonoBehaviour
                 w.Flock(v.boidColony, sep, ali, coh);
             }
         }
+    }
+
+    public void InstantiateCameraAndParticles(GameObject boidChild, GameObject ripCam, GameObject ripParticles)
+    {
+
     }
 }
 
@@ -265,11 +272,11 @@ class BoidParentAlt
         {
             location = new Vector3(location.x, maxPos.y, location.z);
         }
-        if (location.y > maxPos.y)
+        if (location.z > maxPos.z)
         {
             location = new Vector3(location.x, location.y, minPos.z);
         }
-        else if (location.y < minPos.y)
+        else if (location.z < minPos.z)
         {
             location = new Vector3(location.x, location.y, maxPos.z);
         }
@@ -309,7 +316,7 @@ class BoidChildAlt
     public GameObject myVehicle;
     private Rigidbody rb;
 
-    public BoidChildAlt(Vector3 initPos, Vector3 _minPos, Vector3 _maxPos, float _maxSpeed, float _maxForce, Mesh coneMesh)
+    public BoidChildAlt(Vector3 initPos, Vector3 _minPos, Vector3 _maxPos, float _maxSpeed, float _maxForce, Mesh coneMesh, GameObject ripParticles)
     {
         minPos = _minPos - Vector3.one;
         maxPos = _maxPos + Vector3.one;
@@ -323,6 +330,9 @@ class BoidChildAlt
         GameObject.Destroy(myVehicle.GetComponent<BoxCollider>());
 
         myVehicle.transform.position = new Vector3(initPos.x, initPos.y, initPos.z);
+
+        GameObject myParticles = GameObject.Instantiate(ripParticles, myVehicle.transform.position, Quaternion.identity);
+        myParticles.transform.SetParent(myVehicle.transform);
 
         myVehicle.AddComponent<Rigidbody>();
         rb = myVehicle.GetComponent<Rigidbody>();
@@ -362,11 +372,11 @@ class BoidChildAlt
         {
             location = new Vector3(location.x, maxPos.y, location.z);
         }
-        if (location.y > maxPos.y)
+        if (location.z > maxPos.z)
         {
             location = new Vector3(location.x, location.y, minPos.z);
         }
-        else if (location.y < minPos.y)
+        else if (location.z < minPos.z)
         {
             location = new Vector3(location.x, location.y, maxPos.z);
         }
@@ -402,7 +412,7 @@ class BoidChildAlt
         // If the velocity is 0, then the rotation of the boids will glitch. This is one way of preventing this. Another way is making the euler angles only activate if the game object has a velocity larger than 0.
         if (sep == Vector3.zero && ali == Vector3.zero && coh == Vector3.zero)
         {
-            sep = new Vector3(0.1f, 0.1f, 0.1f); ali = new Vector3(0.1f, 0.1f, 0.1f); coh = new Vector3(0.1f, 0.1f, 0.1f);
+            sep = new Vector3(0.1f, 0f, 0.1f); ali = new Vector3(0.1f, 0f, 0.1f); coh = new Vector3(0.1f, 0f, 0.1f);
         }
 
         ApplyForce(sep); // Applying all the forces

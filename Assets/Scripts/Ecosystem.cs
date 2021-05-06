@@ -63,12 +63,12 @@ public class Ecosystem : MonoBehaviour
         }
         for (int i = 0; i < chapter6CreaturePopulation; i++)
         {
-            GameObject chapter6C = Instantiate(chapter6Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            GameObject chapter6C = Instantiate(chapter6Creature, Vector3.zero, Quaternion.identity);
             chapter6Creatures.Add(chapter6C);
         }
         for (int i = 0; i < chapter7CreaturePopulation; i++)
         {
-            GameObject chapter7C = Instantiate(chapter7Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            GameObject chapter7C = Instantiate(chapter7Creature, new Vector3(Random.Range(terrainMin, terrain.cols), 15.25f, Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
             chapter7Creatures.Add(chapter7C);
         }
         for (int i = 0; i < chapter8CreaturePopulation; i++)
@@ -98,12 +98,12 @@ public class Ecosystem : MonoBehaviour
         }
         if (chapter6Creatures.Count <= chapter6MinimumPopulation)
         {
-            GameObject c = Instantiate(chapter6Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            GameObject c = Instantiate(chapter6Creature, Vector3.zero, Quaternion.identity);
             chapter6Creatures.Add(c);
         }
         if (chapter7Creatures.Count <= chapter7MinimumPopulation)
         {
-            GameObject c = Instantiate(chapter7Creature, new Vector3(Random.Range(terrainMin, terrain.cols), Random.Range(4f, 20f), Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
+            GameObject c = Instantiate(chapter7Creature, new Vector3(Random.Range(terrainMin, terrain.cols), 15.25f, Random.Range(terrainMin, terrain.rows)), Quaternion.identity);
             chapter7Creatures.Add(c);
         }
         if (chapter8Creatures.Count <= chapter8MinimumPopulation)

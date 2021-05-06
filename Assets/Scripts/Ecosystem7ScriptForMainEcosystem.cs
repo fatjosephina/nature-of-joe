@@ -27,6 +27,14 @@ public class Ecosystem7ScriptForMainEcosystem : MonoBehaviour
 
     public Rigidbody rb;
 
+    public GameObject RippleCam;
+
+    private void Awake()
+    {
+        //RippleEffects ripple = Instantiate(RippleCam, new Vector3(transform.position.x, 30, transform.position.z), RippleCam.transform.rotation).GetComponent<RippleEffects>();
+        //ripple.target = transform;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +51,6 @@ public class Ecosystem7ScriptForMainEcosystem : MonoBehaviour
         rb.useGravity = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
 
-        location = Vector3.zero; // Vector2.zero is a (0, 0) vector
         velocity = Vector3.zero;
         acceleration = new Vector3(-0.1F, 0f, -0.1F);
         topSpeed = 5F;
@@ -100,13 +107,13 @@ public class Ecosystem7ScriptForMainEcosystem : MonoBehaviour
         shouldStopAfterSeconds = false;
     }
 
-    private Vector3 minimumPos = new Vector3(0f, 2f, 0f), maximumPos = new Vector3(50f, 10f, 50f);
+    private Vector3 minimumPos = new Vector3(0f, 15.25f, 0f), maximumPos = new Vector3(50f, 15.5f, 50f);
 
     public void CheckEdges()
     {
         float newPosX = this.gameObject.transform.position.x;
         float newPosY = this.gameObject.transform.position.y;
-        float newPosZ = this.gameObject.transform.position.y;
+        float newPosZ = this.gameObject.transform.position.z;
         if (this.gameObject.transform.position.x > maximumPos.x)
         {
             newPosX -= maximumPos.x - minimumPos.x;
@@ -127,7 +134,7 @@ public class Ecosystem7ScriptForMainEcosystem : MonoBehaviour
         {
             newPosZ -= maximumPos.z - minimumPos.z;
         }
-        else if (this.gameObject.transform.position.y < minimumPos.y)
+        else if (this.gameObject.transform.position.z < minimumPos.z)
         {
             newPosZ += maximumPos.z - minimumPos.z;
         }
